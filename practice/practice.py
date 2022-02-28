@@ -85,8 +85,101 @@ print(float(z) * 3) # prints 9.0
 
 print(bool("3"))
 
-name = input("what is your name: ")
-age = int(input("What is your age: "))
-height = float(input("What is your height: "))
 
-print("Your name is " + name + " you are " + str(age) + " years old and you are " + str(height) + "cm tall.")
+name = "mason wong"
+first_name = name[0:6] # we want indices 0 to 5. 
+first_name = name[:6] # equivalent to above
+last_name = name[6:10] #  we want indices 6 to 9
+last_name = name[6:] # equivalent to above
+
+name = "mason wong"
+funky_name = name[::3] # predict: mowg <= [0, 3, 6, 9] are indices
+print(funky_name)
+
+
+name = "mason wong"
+reversed_name = name[-1:-8:-1]
+print(reversed_name)
+
+
+website1 = "http://google.com"
+website2 = "http://wikipedia.com"
+my_slice = slice(7, -4)
+name1 = website1[my_slice] # gets "google"
+name2 = website2[my_slice] # gets "wikipedia"
+print(name1)
+print(name2)
+
+
+m = "Magnesium"
+b = "Boronium"
+a = "Aluminium"
+c = "Copper"
+
+if m >= a and m <= c:
+  print("alphabetically " + m + " is between") # doesn't print
+
+if b >= a and b <= c:
+  print("alphabetically " + b + " is between") # does print
+
+x = None
+print(x == 2)
+
+
+for x in range(6):
+    print(x)
+print("finally done")
+
+
+# 
+#---- n = 1, r = 1 = floor(1/2) + 1
+
+ #          s = 1, p = 1
+###         s = 0, p = 3
+#---- n = 3, r = 2 = floor(3/2) + 1
+
+
+  #         s = 2, p = 1
+ ###        s = 1, p = 3
+#####       s = 0, p = 5
+#---- n = 5, r = 3 = floor(5/2) + 1
+
+   #        s = 3, p = 1
+  ###       s = 2, p = 3
+ #####      s = 1, p = 5
+#######     s = 0, p = 7
+#---- n = 7, r = 4 = floor(7/2) + 1
+
+
+    #       s = 4, p = 1
+   ###      s = 3, p = 3
+  #####     s = 2, p = 5
+ #######    s = 1, p = 7
+#########   s = 0, p = 9
+#---- n = 9, r = 5 = floor(9/2) + 1
+
+import math # import the math module
+num = 9  # the number of hashes at the bottom row
+spaces = range(math.floor(num/2), -1, -1) # a range of the spaces
+counter = 1 # a counter to keep track of the hashes to put
+for i in spaces: # only need to index by the spaces
+    # print out spaces
+    for s in range(i): 
+        print(" ", end = "")
+    # print out hashes: we have a for loop to print hashes first
+    for h in range(counter): 
+        print("#", end = "")
+    # always afterwards, we want to increment the counter and have a newline
+    else: 
+        counter += 2
+        print("") # print out the newline
+
+
+
+for x in range(10): 
+  if (x == 9): 
+    break;
+  print(x)
+else: 
+  print("the for loop finished naturally") # wont print # wont print
+print("the for loop finished")
