@@ -304,7 +304,192 @@ Example:
             print("") # print out the newline
 
 # lists <a name = "10"></a>
+Python's version of an array, but you can have more than one variable type. To `print()` the list or elements of the list, we can use the normal `print()` function
+
+    my_list = ["pizza", "hamburger", "hotdog", "spaghetti", "pudding", 12, 3.14]
+    print(my_list)
+    print(my_list[0])
+    print(my_list[1])
+    print(my_list[2])
+    print(my_list[3])
+    print(my_list[4])
+    print(my_list[5])
+    print(my_list[6])
+
+To change a variable in a list, just use the `[]` operator again. 
+
+    my_list = ["one", "two", 3]
+    my_list[2] = "three"
+    print(my_list)
+
+To append use the `.append(<val>)` method. 
+
+To remove use the `.remove(<val>)` method.
+
+To remove the last element use the `.pop()` method. 
+
+To insert at an index use the `.insert(index_num, <val>)` method. 
+
+To sort a list use the `.sort()` method. 
+
+To clear a list use the `.clear()` method. 
+
+
+  
+    my_list = [4, 2, 3, 1, "d", "b", "c", "a"]
+    my_list.append(5) # adds 5 to the end
+    my_list.append("e") # add "e" to the end
+    my_list.insert(-1, "to_be_removed") # inserts "to_be_removed" so it's now at the second last pos.
+    my_list.remove("to_be_removed") # removes "to_be_removed"
+    my_list.pop() # removes "e"
+    my_list.clear() # empty list now. Equiv to []
+
+To use the `.sort()` method, all the types in your list have to be the same: 
+
+    my_ints = [8, 2, 5, 3, 1, 4, 6, 7, 10,  9]
+    my_ints.sort() # sorted ascended
+
+    my_list = ["bbb", "dd", "a", "c", "e"]
+    my_list.sort() # sorted aplhanumerically
+
+Tuples support conditionals with the `in` keyword:
+    
+    letters = ["a", "b", "c"]
+    if "a" in letters: 
+      print("first letter is in the list")
+
+Recall that if you have a set $A = \{1,2,3,4\}$ and you also hava a set $B = \{x^2 \mid x \in A\}$ we can also write this inpyton like so: 
+
+    A = [1, 2, 3, 4]
+    B = [x**2 for x in A] # [1, 4, 9, 16]
 # 2D lists <a name = "11"></a>
+Basically, you can have lists as elements of lists and to access them, you need `my_list[a][b]` syntax. For example: 
+
+    
+    drinks = ["coffee", "soda", "tea"]
+    dinner = ["pizza", "hamburger", "hotdog"]
+    dessert = ["cake", "ice cream"]
+
+    food = [drinks, dinner, dessert]
+
+    print(food) # prints [['coffee', 'soda', 'tea'], ['pizza',...],...]
+    print(food[2]) # prints ['cake','ice cream']
+    print(food[1][0]) # prints 'pizza'
 # tuples <a name = "12"></a>
+tuples are ordered and **cannot change**. We can still access them with the `[]` operator. 
+
+    student = ("mason", 21, "male")
+    print(student) # ('mason', 21, 'male')
+    print(student[0]) # 'mason'
+
+tuples also support conditionals in the sense of containing a value:
+
+    student = ("mason", 21, "male")
+    if "mason" in student: 
+      print("mason is present")
+
+To count the amount of times a value appears, use the `.count(val)` method. To find the index of the first instance of a value use the `.index(val)` method
+    
+    my_tuple = ["a", "a", "a", "b", "b"]
+    count_a = my_tuple.count("a") # returns 3
+    count_b = my_tuple.count("b") # returns 2. 
+    index_a = my_tuple.index("a") # returns 0 <- index of first
+    index_b = my_tuple.index("b") # returns 3 <- index of first
 # sets <a name = "13"></a>
+To make a set use `{}` curly brackets. They are **unordered** and **unindexed**. To show unordered-ness:
+    
+    # run this 10 times. The order of the access will be different. 
+    set = {"abcd", "cdef", "efgh", "ijkl"}
+    for x in set:
+        print(x)
+
+Accessing elements in a set is much faster than a list:
+
+    # this will print 'hello world'
+    set = {"abcd", "cdef", "efgh", "ijkl"}
+    if "abcd" in set: 
+      print("hello world")
+
+The methods which update the current set always return `None`. They update and that's it.
+
+    even = {2, 4, 6, 8}
+    odd = {1, 3, 5, 7}
+    print(even.add(10)) # even = {2,4,6,8,10}
+    print(even.remove(10)) # even = {2,4,6,8}
+    print(even.clear()) # even = {}
+    print(even.update(odd)) # even = {1,3,5,7}
+
+The methds like `.union`, `.intersection`, `.difference` don't update our sets and return the sets from the math operations of $\bigcup$, $\bigcap$ and $\setminus$
+
+    primes = {2, 3, 5, 7}
+    dice = {1, 2, 3, 4, 5, 6}
+    print(dice.union(primes)) # {1,2,3,4,5,6,7}
+    print(dice.insersection(primes)) # {2,3,5}
+    print(dice.difference(primes)) # {1,4,6}
 # dictionaries <a name = "14"></a>
+A dictionary is a collection of {key:value} pairs. It is similar to a set in the sense that the `keys` cannot be repeated. 
+
+To make a dictionary 
+
+
+    capitals = {'USA' : 'Washington DC',
+        'India' : 'New Dehli',
+        'China' : 'Beijing',
+        'Russia' : 'Moscow'}
+    print(capitals) # prints {'USA': 'Washington DC', 'India': 'Dehli',...}
+
+You can update the dictionary by the `.update({key : value})` method. 
+
+
+    capitals = {'USA' : 'Washington DC',
+        'India' : 'New Dehli',
+        'China' : 'Beijing',
+        'Russia' : 'Moscow'}
+
+    captials.update({'Germany': 'Berlin'}) # can add a new (key, value)
+    capitals.update({'USA': 'Texas'}) # update the capital of USA
+    print(capitals)
+
+To get the `value` at a key use the `.get(key)` method or `my_dic[key]` indexing. The indexing is more dangerous. 
+
+    capitals = {'USA' : 'Washington DC',
+        'India' : 'New Dehli',
+        'China' : 'Beijing',
+        'Russia' : 'Moscow'}
+    print(capitals.get('USA')) # capitals['USA'] = 'Washington DC'
+    print(capitals.get('India')) # capitals['India'] = 'Dheli'
+    print(capitals.get('China')) # capitals['china'] = 'Beijing'
+    print(capitals.get('Russia')) # capitals['Russia'] = 'Moscow'
+    print(capitals.get('Germany')) # captials['Germany'] <- throws error with this notation
+
+To get a list of the keys that is iterable and viewable we can use the `.keys()` method
+
+    capitals = {'USA' : 'Washington DC',
+        'India' : 'New Dehli',
+        'China' : 'Beijing',
+        'Russia' : 'Moscow'}
+
+    for x in capitals.keys():
+      print(x)
+    
+To get a list of the values  that is iterable and viewable we can use the `.values()` method
+
+
+    capitals = {'USA' : 'Washington DC',
+        'India' : 'New Dehli',
+        'China' : 'Beijing',
+        'Russia' : 'Moscow'}
+
+    for x in capitals.values():
+      print(x)
+
+To get a list of the `(key, values)` pairs we can use `.items()` method alongside the `for k, v in my_dic.items():`
+
+    capitals = {'USA' : 'Washington DC',
+        'India' : 'New Dehli',
+        'China' : 'Beijing',
+        'Russia' : 'Moscow'}
+
+    for k,v in capitals.items():
+      print(k, v)
+

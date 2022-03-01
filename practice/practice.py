@@ -183,3 +183,88 @@ for x in range(10):
 else: 
   print("the for loop finished naturally") # wont print # wont print
 print("the for loop finished")
+
+
+
+drinks = ["coffee", "soda", "tea"]
+if "coffee" in drinks: 
+    print("blabla")
+
+
+my_tuple = ["a", "a", "a", "b", "b"]
+count_a = my_tuple.count("a") # returns 3
+count_b = my_tuple.count("b") # returns 2. 
+index_a = my_tuple.index("a")
+index_b = my_tuple.index("b")
+print(index_a)
+print(index_b)
+
+print("\n\n\n")
+
+even = {2, 4, 6, 8}
+odd = {1, 3, 5, 7}
+print(even.add(10)) # even = {2,4,6,8,10}
+print(even.remove(10)) # even = {2,4,6,8}
+print(even.clear()) # even = {}
+print(even.update(odd)) # even = {1,3,5,7}
+
+
+print(even.union(odd)) # returns {1,2,3,4,5,6,7,8}
+
+
+
+
+primes = {2, 3, 5, 7}
+dice = {1, 2, 3, 4, 5, 6}
+dice.clear
+print(dice.union(primes))
+print(dice.intersection(primes))
+print(dice.difference(primes))
+
+
+capitals = {'USA' : 'Washington DC',
+    'India' : 'New Dehli',
+    'China' : 'Beijing',
+    'Russia' : 'Moscow'}
+capitals.update({'Germany' : 'Berlin'})
+capitals.update({'USA': 'Las Vegas'})
+capitals.pop('China')
+
+# print(capitals)
+# print("\n\n\n")
+# print(capitals.get('USA')) # capitals['USA']
+# print(capitals.get('India')) # capitals['India']
+# print(capitals.get('China')) # capitals['china']
+# print(capitals.get('Russia')) # capitals['Russia']
+# print(capitals.get('Germany')) # captials['Germany'] <- throws error
+
+print(capitals.keys()) # prints the keys and not the values
+
+x = capitals.keys()
+
+for i in x: 
+    print(i)
+# print(capitals.values()) # prints the values and not the keys
+# print(capitals.items()) # prints the key, value pairs
+
+# for k,v in capitals.items():
+#     print(k, v)
+
+# for k in capitals:
+#     print(k)
+
+
+
+def r(n): 
+    if n < 0: 
+        return -1 
+    if n == 0: 
+        return 1 
+    return (r(n-1) + 2)/(r(n-1)+1)
+    
+print(r(1))
+print(r(2))
+print(r(3))
+print(r(4))
+print(r(5))
+
