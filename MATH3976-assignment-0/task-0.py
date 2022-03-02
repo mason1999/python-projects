@@ -70,7 +70,10 @@ def cubic_formula(a,b,c,d):
     if a == 0: 
         return quadratic_formula(b, c, d)
     if d == 0: 
-        return 0.0, quadratic_formula(a, b, c)
+        tup = quadratic_formula(a, b, c)
+        if (len(tup) == 2): 
+            return 0.0, tup[0], tup[1]
+        return 0.0, tup[0]
 
     # This is to be used later on 
     w = (-1 + 3**(1/2) * 1j)/2
@@ -86,8 +89,11 @@ def cubic_formula(a,b,c,d):
         y3 = y2 * w
         return (y1 - b/(3*a)), (y2 - b/(3*a)), (y3 - b/(3*a))
 
-    if p != 0 and q == 0:  # solving the depressed cubic y^3 + py = y(y^2 + p) = 0
-        return 0.0, quadratic_formula(1, 0, p)
+    if q == 0: # solving the depressed cubic y^3 + py = y(y^2 + p) = 0
+        tup = quadratic_formula(1, 0, p)
+        if (len(tup) == 2): 
+            return 0.0, tup[0], tup[1]
+        return 0.0, tup[0]
         
     # Step 2: we now compare this polynomial with the identity 
     # (u + v)^3 = u^3 + 3uv(u + v) + v^3 which gets us the fact
@@ -112,6 +118,43 @@ def cubic_formula(a,b,c,d):
     x3 = y3 - b/(3*a)
     
     return x1, x2, x3
-print(cubic_formula(1, 0, 0, 0))
-print(cubic_formula(1, 0, 0, 27))
-print(cubic_formula(3, 4, 5, 6))
+
+# --------------------------------
+def print_roots(tup): 
+    count = 1
+    for x in tup: 
+        print("root " + str(count) + " is " + str(x))
+        count += 1
+
+def check_root_sup(r, coeffs): # eg (1, 1, 0, 1) = x^3 + x^2 + 0x + 1
+
+    length = len(coeffs)
+    starting_power = length - 1 
+    sum = 0
+    for alpha in coeffs: 
+        sum += alpha * r ** starting_power 
+        starting_power -= 1 
+    return sum
+
+def check_root(r, *arg): 
+    list = []
+    i = 0
+    for x in arg: 
+        list.append(x)
+    tup = tuple(list)
+    return check_root_sup(r, tup)
+
+def check_roots(tup, *arg): 
+    for r in tup: 
+        print(check_root(r, *arg))
+
+# coefficients 
+a = 5 
+b = 0
+c = 0 
+d = 2
+# print the roots
+print_roots(cubic_formula(a, b, c, d))
+print("\n")
+# sub the roots we get into the cubic formula
+check_roots(cubic_formula(a, b, c, d), a, b, c, d)
