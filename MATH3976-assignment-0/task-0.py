@@ -158,3 +158,111 @@ print_roots(cubic_formula(a, b, c, d))
 print("\n")
 # sub the roots we get into the cubic formula
 check_roots(cubic_formula(a, b, c, d), a, b, c, d)
+
+def quartic_formula(a,b,c,d,e):
+    if e == 0: # solving x(ax^3 + bx^2 + cx + d) = 0
+        print("ENTERED e == 0") # TODO: delete
+        tup = cubic_formula(a, b, c, d)
+        if len(tup) == 1: 
+            return 0.0, tup[0]
+        if len(tup) == 2: 
+            return 0.0, tup[0], tup[1]
+        if len(tup) == 3: 
+            return 0.0, tup[0], tup[1], tup[2]
+    if a == 0: # solving bx^3 + cx^2 + dx + 3
+        print("ENTERED a == 0") # TODO: delete
+        tup = cubic_formula(b, c, d, e)
+        if len(tup) == 1: 
+            tup[0]
+        if len(tup) == 2: 
+            return tup[0], tup[1]
+        if len(tup) == 3: 
+            return tup[0], tup[1], tup[2]
+
+    alph = (-3 * b**2)/(8 * a**2) + c/a 
+    beta = (b**3)/(8 * a**3) - (b * c)/(2 * a**2) + d/a 
+    gama = (-3 * b**4)/(256 * a**4) + (c * b**2)/(16 * a**3) - (b * d)/(4 * a**2) + e/a
+
+    if beta == 0: 
+        print("ENTERED beta == 0") # TODO: delete
+        u1 = -1 * ((-1 * alph - (alph**2 - 4 * gama)**(1/2))/2)**(1/2)
+        u2 = -1 * ((-1 * alph + (alph**2 - 4 * gama)**(1/2))/2)**(1/2)
+        u3 = ((-1 * alph - (alph**2 - 4 * gama)**(1/2))/2)**(1/2)
+        u4 = ((-1 * alph + (alph**2 - 4 * gama)**(1/2))/2)**(1/2)
+
+        x1 = u1 - b/(4*a)
+        x2 = u2 - b/(4*a)
+        x3 = u3 - b/(4*a)
+        x4 = u4 - b/(4*a)
+
+        return x1, x2, x3, x4
+
+    if gama == 0: 
+        print("ENTERED gama == 0") # TODO: delete
+        tup = cubic_formula(1, 0, alph, beta)
+        if len(tup) == 1: 
+            u1 = 0.0
+            u2 = tup[0]
+
+            x1 = u1 - b/(4*a)
+            x2 = u2 - b/(4*a)
+            return x1, x2
+        if len(tup) == 2: 
+            u1 = 0.0
+            u2 = tup[0]
+            u3 = tup[1]
+
+            x1 = u1 - b/(4*a)
+            x2 = u2 - b/(4*a)
+            x3 = u3 - b/(4*a)
+            
+            return x1, x2, x3
+        if len(tup) == 3: 
+            u1 = 0.0
+            u2 = tup[0]
+            u3 = tup[1]
+            u4 = tup[2]
+
+            x1 = u1 - b/(4*a)
+            x2 = u2 - b/(4*a)
+            x3 = u3 - b/(4*a)
+            x4 = u4 - b/(4*a)
+
+            return x1, x2, x3, x4
+
+    print("SOLVING MORE GENERAL QUARTIC") # TODO: delete
+    # at this point we basically complete the square twice. The first time on the LHS and 
+    # the second time results in us solving a necesary quadratic:
+    # 8y^3 + 20alpha y^2 + (16alpha^2 - 8gamma) y + (4alpha^3 - 4alpha gamma - beta^2) = 0
+    y_values = cubic_formula(8, 20 * alph, 16 * alph**2 - 8 * gama, 4 * alph**3 - 4 * alph * gama - beta**2)
+    y = y_values[0]
+
+    v1 = -1 * (3 * alph + 2 * y - (2 * beta)/((alph + 2 * y)**(1/2)))
+    v2 = -1 * (3 * alph + 2 * y - (2 * beta)/((alph + 2 * y)**(1/2)))
+    v3 = -1 * (3 * alph + 2 * y + (2 * beta)/((alph + 2 * y)**(1/2)))
+    v4 = -1 * (3 * alph + 2 * y + (2 * beta)/((alph + 2 * y)**(1/2)))
+
+    u1 = (-1 * ((alph + 2 * y)**(1/2)) - (v1**(1/2)))/2
+    u2 = (-1 * ((alph + 2 * y)**(1/2)) + (v2**(1/2)))/2
+    u3 = (((alph + 2 * y)**(1/2)) - (v3**(1/2)))/2
+    u4 = (((alph + 2 * y)**(1/2)) + (v4**(1/2)))/2
+
+    x1 = u1 - b/(4*a)
+    x2 = u2 - b/(4*a)
+    x3 = u3 - b/(4*a)
+    x4 = u4 - b/(4*a)
+
+    return x1, x2, x3, x4
+
+
+# coefficients 
+a = 1 
+b = 2
+c = 3 
+d = 4
+e = 5
+# print the roots
+print_roots(quartic_formula(a, b, c, d, e))
+print("\n")
+# sub the roots we get into the cubic formula
+check_roots(quartic_formula(a, b, c, d, e), a, b, c, d, e)
