@@ -3,12 +3,17 @@
 2. [multiple assignment](#2)
 3. [useful string methods](#3)
 4. [typecasting](#4)
+4. [the f-string](#4.1)
 5. [user input](#5)
 6. [string slicing](#6)
 7. [if-elif-else](#7)
+7. [while loop,  None and break](#7.1)
 8. [for loop, ranges and continue](#8)
 9. [Nested loops and for-else](#9)
 10. [lists](#10)
+10. ['=' vs .copy() for lists](#10.1)
+10. [str.split() and str.join()](#10.2)
+10. [enumerate()](#10.3)
 11. [2D lists](#11)
 12. [tuples](#12)
 13. [sets](#13)
@@ -35,6 +40,18 @@ Finally to concatenate strings use the `+` operator.
 
 For `int` to increment a variable use the `+=` operator
 
+Floats are imprecise: 
+    
+    print(0.1 + 0.2) # prints 0.300000000004
+    print((0.1 + 0.2) == 0.3) # prints false
+
+So to compare floats, make sure to compare `ranges` instead: 
+
+    result = 0.1 + 0.2 
+    target = 0.3 
+    epsilon = 0.001
+    print(abs(result - target) < epsilon)
+   
 
 # multiple assignment <a name="2"></a>
 To assign multiple values in one line of code, use commas
@@ -108,6 +125,28 @@ To typecast a variable just surround the variable by the class. For example `str
     print(float(z) * 3) # prints 9.0
     print(bool(z)) # prints true
 
+# the f-string <a name = "4.1"></a>
+Allows us to easily print stirngs interspersed with other types of variables
+
+    age = 18
+    print(f'I am {age} years old')
+
+
+Can do calculations like `+`
+
+    age = 18
+    print(f'I am {age + 2} years old')
+
+Can specify the number of decimal places: 
+
+    fraction_of_cake = 2/7
+    print(f'I am having {fraction_of_cake:.3f} of the cake')
+
+Can print `{` and `}` by specifying two of them 
+
+
+    score = 5
+    print(f'Your score is: {{score}}')
 
 # user input <a name = "5"></a>
 To accept user input we use the `input()` function. It returns a `str` and if we also wanted a prompt we would put an optional string inside the input function `input("prompt")`
@@ -303,7 +342,7 @@ Example:
             counter += 2
             print("") # print out the newline
 
-# lists <a name = "10"></a>
+# lists <a name = "11"></a>
 Python's version of an array, but you can have more than one variable type. To `print()` the list or elements of the list, we can use the normal `print()` function
 
     my_list = ["pizza", "hamburger", "hotdog", "spaghetti", "pudding", 12, 3.14]
@@ -352,7 +391,7 @@ To use the `.sort()` method, all the types in your list have to be the same:
     my_list = ["bbb", "dd", "a", "c", "e"]
     my_list.sort() # sorted aplhanumerically
 
-Tuples support conditionals with the `in` keyword:
+Lists support conditionals with the `in` keyword:
     
     letters = ["a", "b", "c"]
     if "a" in letters: 
@@ -362,6 +401,67 @@ Recall that if you have a set $A = \{1,2,3,4\}$ and you also hava a set $B = \{x
 
     A = [1, 2, 3, 4]
     B = [x**2 for x in A] # [1, 4, 9, 16]
+
+# '=' vs .copy() for lists <a name = "10.1"></a>
+when we use the `=` operator, we are passing a `memory address` around. So when when change one of the elements at this memeory address it changes all other things referencing it. 
+
+    a = [7, 8, 9]
+    b = a # b has the memory address of a
+    b[0] = 5 # this changes 'a' aswell
+    print("a: ", a) # prints [5, 8, 9]
+    print("b: ", b) # prints [5, 8, 9]
+
+The `.copy()` function makes a new list (so new reference). We can also make a new list with the `list()` function. It creates a list from any enumerable sequence. 
+
+    my_list = [1, 2, 3, 4]
+    new_list = my_list.copy() # makes a new list
+
+    my_list = ['dog', 'cat', 'rabbit']
+    new_list_one = list(my_list) # makes a new list
+    
+    my_list = [1, 2, 3, 4, 5]
+    new_list_two = list(my_list) # makes a new list
+
+Like strings, lists have the `*`, `+`, `+=`, etc operators. 
+
+    x = [0] * 10 # a list of the element zero. Then put 10 zeroes in the list. 
+
+    y = [[]] * 10 # a list of an empty list. Then replicate the list 10 times
+                  # however we replicate the MEMORY ADDRESS
+
+    y[0].append(1) # changes all values in each list element to 1
+
+Concatenate two lists together with `+`
+
+    a = [1, 2, 3]
+    b = [4, 5, 6]
+    print(a + b)
+
+# str.split() and str.join()
+The  `string.split("delimiter")` takes in a string and returns a `list` where the lists elements are obtained by getting the tokens between the delimters
+
+    numbers = input("Enter some numbers: ") # e.g enter 5, 6, 7, 8: numbers <- "5, 6, 7, 8"
+    numbers = numbers.split(", ") # numbers <- ['5', '6', '7', '8']
+
+The `"delimiter".join(list)` takes a list and joins the elements together via a delimiter
+
+    words = ["The", "quick", "brown", "fox", "jumped", "over", "the", "lazy", "dog"]
+    sentence_separated_by_X = "X".join(words)
+    normal_sentence = " ".join(words)
+# enumerate 
+The `enumerate()` function takes in a `list`, `str` or `tuple` and adds an index alongside the value. Hence we can do something like: 
+
+  names = ['Alice', 'Bob', 'Eve', 'Mallory']
+
+    # Print each name with the index:
+    for i, name in enumerate(names):
+        print(i, name)
+Or 
+
+    s = "abcdefg"
+    # Print each char with the index:
+    for i, x in enumerate(s):
+      print(i, x)
 # 2D lists <a name = "11"></a>
 Basically, you can have lists as elements of lists and to access them, you need `my_list[a][b]` syntax. For example: 
 
@@ -395,6 +495,25 @@ To count the amount of times a value appears, use the `.count(val)` method. To f
     count_b = my_tuple.count("b") # returns 2. 
     index_a = my_tuple.index("a") # returns 0 <- index of first
     index_b = my_tuple.index("b") # returns 3 <- index of first
+
+We can create a tuple of a single element with the following syntax:
+
+    names = ('Mason',) # Notice the awkward comma position
+    print(names)
+    print(len(names))
+
+- We can convert from `tuple` $\implies$ `list` via the `list()` function. 
+- We can convert from `list` $\implies$ `tuple` via the `tuple()` function. 
+
+We can also do multiple assignments with tuples and lists: 
+
+    student_one = ("Mason", 21)
+    name, age = student_one
+    print(name, age)
+
+    student_two = ["Bob", 20]
+    name, age = student_two
+    print(name, age)
 # sets <a name = "13"></a>
 To make a set use `{}` curly brackets. They are **unordered** and **unindexed**. To show unordered-ness:
     
