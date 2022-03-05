@@ -3,24 +3,25 @@
 2. [multiple assignment](#2)
 3. [useful string methods](#3)
 4. [typecasting](#4)
-4. [the f-string](#4.1)
-5. [user input](#5)
-6. [string slicing](#6)
-7. [if-elif-else](#7)
-7. [while loop,  None and break](#7.1)
-8. [for loop, ranges and continue](#8)
-9. [Nested loops and for-else](#9)
-10. [lists](#10)
-10. ['=' vs .copy() for lists](#10.1)
-10. [str.split() and str.join()](#10.2)
-10. [enumerate()](#10.3)
-11. [2D lists](#11)
-12. [tuples](#12)
-13. [sets](#13)
-14. [dictionaries](#14)
+5. [the f-string](#5)
+6. [user input](#6)
+7. [string slicing](#7)
+8. [if-elif-else](#8)
+9. [while loop,  None and break](#9)
+10. [for loop, ranges and continue](#10)
+11. [Nested loops and for-else](#11)
+12. [lists](#12)
+13. ['=' vs .copy()](#13)
+14. [str.split() and str.join()](#14)
+15. [enumerate()](#15)
+16. [2D lists](#16)
+17. [tuples](#17)
+18. [sets](#18)
+19. [dictionaries](#19)
+20. [functions, default values and first class functions](#20)
 
 
-# print, type and variables <a name="1"></a>
+# print, type and variables <a name=""></a>
 To print something use the `print()` function. 
 
 The different data types we've encountered are
@@ -53,7 +54,7 @@ So to compare floats, make sure to compare `ranges` instead:
     print(abs(result - target) < epsilon)
    
 
-# multiple assignment <a name="2"></a>
+# multiple assignment <a name=""></a>
 To assign multiple values in one line of code, use commas
 
     name, age, truth = "Mason", 21, True
@@ -63,7 +64,7 @@ To assign multiple values to the same value, use lots of equals
     mason1 = mason2 = mason3 = 21
 
 
-# useful string methods <a name="3"></a>
+# useful string methods <a name=""></a>
 To find the length of a string use the `len()` method. 
 
     name = "mason"
@@ -116,7 +117,7 @@ To concatenate strings use the `+` operator. To repeat strings use the `*` opera
     print(greeting)
 
 
-# typecasting <a name="4"></a>
+# typecasting <a name=""></a>
 To typecast a variable just surround the variable by the class. For example `str(var)` or `int(var)` or `float(var)` or `bool(var)`. Note that typecasting anything to a `boolean` will become true **so long as** it is not **zero** or an **empty string**. 
 
     z = "3"
@@ -125,7 +126,7 @@ To typecast a variable just surround the variable by the class. For example `str
     print(float(z) * 3) # prints 9.0
     print(bool(z)) # prints true
 
-# the f-string <a name = "4.1"></a>
+# the f-string <a name = ""></a>
 Allows us to easily print stirngs interspersed with other types of variables
 
     age = 18
@@ -148,7 +149,7 @@ Can print `{` and `}` by specifying two of them
     score = 5
     print(f'Your score is: {{score}}')
 
-# user input <a name = "5"></a>
+# user input <a name = ""></a>
 To accept user input we use the `input()` function. It returns a `str` and if we also wanted a prompt we would put an optional string inside the input function `input("prompt")`
 
 Example: 
@@ -159,7 +160,7 @@ Example:
     height = float(input("What is your height: "))
     print("Your name is " + name + " you are " + str(age) + " years old and you are " + str(height) + "cm tall.")
 
-# String slicing <a name = "6"></a>
+# String slicing <a name = ""></a>
 To split a string we can use: 
 - The `[a:b]` indexing operator to obtain indices from $a \le x < b$. **note how the firs index is inclusive whereas the second index is exclusive**.  
 - `slice()` function. 
@@ -216,7 +217,7 @@ Another application:
     name1 = website1[my_slice] # gets "google"
     name2 = website2[my_slice] # gets "wikipedia"
 
-# if-elif-else <a name = "7"></a>
+# if-elif-else <a name = ""></a>
 The `if`, `elif` and `else` looks like:
 
     mark = int(input("Enter your mark: "))
@@ -254,7 +255,7 @@ The logical operators are: `and`, `or` and `not`
     if b >= a and b <= c:
       print("alphabetically " + b + " is between") # does print
 
-# while loop,  None and break <a name = "8"></a>
+# while loop,  None and break <a name = ""></a>
 The `none` keyword is pythons version of **nothing**. 
 
     name = None 
@@ -275,7 +276,7 @@ We can emulate the `do-while` loop with a `True` conditional alongside a conditi
         break;
     print("You got it! The magic number was " + str(user_number))
 
-# for loop, ranges and continue<a name = "9"></a>
+# for loop, ranges and continue<a name = ""></a>
 `for` loops are used to iterate over things like: `list`, `tuple`, `dictionary`, `set`, `string`, `range()`
 
 - `range(a)` : represents the numbers  `0, 1, 2, ..., a-1`. Equivalent to `range(0, a)`
@@ -299,7 +300,7 @@ For example:
     for i in my_nums: 
       print(i)
 
-# Nested loops and for-else <a name = "10"></a>
+# Nested loops and for-else <a name = ""></a>
 An example of nested for loops can be seen here when we try to print out triangles with the following code. It can be extended to even numbers, but I'm too lazy. 
 
 A `for-else` is of the form
@@ -342,7 +343,7 @@ Example:
             counter += 2
             print("") # print out the newline
 
-# lists <a name = "11"></a>
+# lists <a name = ""></a>
 Python's version of an array, but you can have more than one variable type. To `print()` the list or elements of the list, we can use the normal `print()` function
 
     my_list = ["pizza", "hamburger", "hotdog", "spaghetti", "pudding", 12, 3.14]
@@ -402,7 +403,7 @@ Recall that if you have a set $A = \{1,2,3,4\}$ and you also hava a set $B = \{x
     A = [1, 2, 3, 4]
     B = [x**2 for x in A] # [1, 4, 9, 16]
 
-# '=' vs .copy() for lists <a name = "10.1"></a>
+# '=' vs .copy() for lists <a name = ""></a>
 when we use the `=` operator, we are passing a `memory address` around. So when when change one of the elements at this memeory address it changes all other things referencing it. 
 
     a = [7, 8, 9]
@@ -462,7 +463,7 @@ Or
     # Print each char with the index:
     for i, x in enumerate(s):
       print(i, x)
-# 2D lists <a name = "11"></a>
+# 2D lists <a name = ""></a>
 Basically, you can have lists as elements of lists and to access them, you need `my_list[a][b]` syntax. For example: 
 
     
@@ -475,7 +476,7 @@ Basically, you can have lists as elements of lists and to access them, you need 
     print(food) # prints [['coffee', 'soda', 'tea'], ['pizza',...],...]
     print(food[2]) # prints ['cake','ice cream']
     print(food[1][0]) # prints 'pizza'
-# tuples <a name = "12"></a>
+# tuples <a name = ""></a>
 tuples are ordered and **cannot change**. We can still access them with the `[]` operator. 
 
     student = ("mason", 21, "male")
@@ -514,7 +515,7 @@ We can also do multiple assignments with tuples and lists:
     student_two = ["Bob", 20]
     name, age = student_two
     print(name, age)
-# sets <a name = "13"></a>
+# sets <a name = ""></a>
 To make a set use `{}` curly brackets. They are **unordered** and **unindexed**. To show unordered-ness:
     
     # run this 10 times. The order of the access will be different. 
@@ -545,7 +546,7 @@ The methds like `.union`, `.intersection`, `.difference` don't update our sets a
     print(dice.union(primes)) # {1,2,3,4,5,6,7}
     print(dice.insersection(primes)) # {2,3,5}
     print(dice.difference(primes)) # {1,4,6}
-# dictionaries <a name = "14"></a>
+# dictionaries <a name = ""></a>
 A dictionary is a collection of {key:value} pairs. It is similar to a set in the sense that the `keys` cannot be repeated. 
 
 To make a dictionary 
@@ -612,3 +613,81 @@ To get a list of the `(key, values)` pairs we can use `.items()` method alongsid
     for k,v in capitals.items():
       print(k, v)
 
+# functions, default values and first class functions
+To make a function it's like this:
+
+    def my_func(): 
+      print("hello world")
+
+To use parameters it's like this: 
+
+    def print_num(n): 
+      print(n)
+
+To return paramters and use them it's like this: 
+
+    def identity(n): 
+      return n 
+
+    x = identity(5)
+    print(x)
+
+To use more than one parameter we can just specify it: 
+
+    def add(x, y): 
+      return x + y 
+
+    x = add(5, 9)
+    print(x)
+
+We also don't have to return anything: 
+
+    def just_print(a, b, c): 
+      print(a)
+      print(b)
+      print(c)
+      return None # or can write 'return ' <-- note the blank! 
+
+Moreover, we can have default values. It's like an optional parameter, where if you don't insert anything, it'll literally default to some predefined value!
+
+    def greet(name, greeting='Hello'):
+      print(f'{greeting}, {name}!')
+        
+    greet('Jacob')
+    greet('Jacob', 'Ciao')
+    greet('Jacob', greeting = "yo")
+    greet(greeting = "bon soir", name = "jacob")
+
+Functions can also be stored in variables (like c's equivalent to a function pointer)
+
+    def add(x, y):
+        return x + y
+
+    def mul(x, y):
+        return x * y
+
+    # Store the value of `add` into a variable named op
+    op1 = add
+    print(op1(1, 2))
+
+    op2 = mul
+    print(op2(1, 2))
+
+    print(type(op1))
+    print(type(op2))
+
+We can pass functions as arguments
+
+    def add(x, y):
+        return x + y
+
+    def mul(x, y):
+        return x * y
+
+    def operate(f, x, y):
+        # Call the function `f` with parameters
+        return f(x, y)
+
+    # Here, we pass the `add` function as `f` into the operate function
+    print(operate(add, 1, 2))
+    print(operate(mul, 1, 2))
