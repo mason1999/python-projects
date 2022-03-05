@@ -547,72 +547,198 @@ The methds like `.union`, `.intersection`, `.difference` don't update our sets a
     print(dice.insersection(primes)) # {2,3,5}
     print(dice.difference(primes)) # {1,4,6}
 # dictionaries <a name = ""></a>
-A dictionary is a collection of {key:value} pairs. It is similar to a set in the sense that the `keys` cannot be repeated. 
+A dictionary is a collection of {key:value} pairs. It is similar to a set in the sense that the `keys` cannot be repeated. Note that with `lists` and `tuples` are **ordered** whereas `dictionaries` and `sets` are **unordered**
 
-To make a dictionary 
+To make a dictionary: 
+
+    # a list of a students marks
+    marks = [85, 90, 72, 50]
+
+    # dictionaries make things easier
+    marks = {
+    'Quiz 1': 85,
+    'Quiz 2': 90,
+    'Assignment 1': 72,
+    'Assignment 2': 50,
+    }
 
 
-    capitals = {'USA' : 'Washington DC',
-        'India' : 'New Dehli',
-        'China' : 'Beijing',
-        'Russia' : 'Moscow'}
-    print(capitals) # prints {'USA': 'Washington DC', 'India': 'Dehli',...}
+To access a value, just use the `key`
 
-You can update the dictionary by the `.update({key : value})` method. 
+    marks = {
+        'Quiz 1': 85,
+        'Quiz 2': 90,
+        'Assignment 1': 72,
+        'Assignment 2': 50,
+    }
 
-
-    capitals = {'USA' : 'Washington DC',
-        'India' : 'New Dehli',
-        'China' : 'Beijing',
-        'Russia' : 'Moscow'}
-
-    captials.update({'Germany': 'Berlin'}) # can add a new (key, value)
-    capitals.update({'USA': 'Texas'}) # update the capital of USA
-    print(capitals)
-
-To get the `value` at a key use the `.get(key)` method or `my_dic[key]` indexing. The indexing is more dangerous. 
-
-    capitals = {'USA' : 'Washington DC',
-        'India' : 'New Dehli',
-        'China' : 'Beijing',
-        'Russia' : 'Moscow'}
-    print(capitals.get('USA')) # capitals['USA'] = 'Washington DC'
-    print(capitals.get('India')) # capitals['India'] = 'Dheli'
-    print(capitals.get('China')) # capitals['china'] = 'Beijing'
-    print(capitals.get('Russia')) # capitals['Russia'] = 'Moscow'
-    print(capitals.get('Germany')) # captials['Germany'] <- throws error with this notation
-
-To get a list of the keys that is iterable and viewable we can use the `.keys()` method
-
-    capitals = {'USA' : 'Washington DC',
-        'India' : 'New Dehli',
-        'China' : 'Beijing',
-        'Russia' : 'Moscow'}
-
-    for x in capitals.keys():
-      print(x)
+    print(marks['Assignment 1'])
     
-To get a list of the values  that is iterable and viewable we can use the `.values()` method
+To add a value or change a value from an existing key, just assign the value: 
+
+    marks = {
+        'Quiz 1': 85,
+        'Quiz 2': 90,
+        'Assignment 1': 72,
+        'Assignment 2': 50
+    }
+    marks['Final Exam'] = 70 # add a (key, value)
+    marks['Quiz 1'] = 90 # change a value from existing key
+    print(marks['Final Exam'])
+    print(marks['Quiz 1'])
+
+The `=` operator is used for assigning a reference to the memory address. If we didn't want to get the same memory address, we would use the `.copy()` method
+
+    mason_marks = {'Quiz 1': 60, 'Quiz 2': 70, 'Quiz 3': 80}
+
+    # a reference to mason_marks
+    reference_to_marks = mason_marks 
+    reference_to_marks['Quiz 1'] = 90
+    print(mason_marks['Quiz 1'])
 
 
-    capitals = {'USA' : 'Washington DC',
-        'India' : 'New Dehli',
-        'China' : 'Beijing',
-        'Russia' : 'Moscow'}
+    # a new object entirely
+    copy_of_marks = mason_marks.copy()
+    copy_of_marks['Quiz 1'] = 20
+    print(mason_marks['Quiz 1'])
 
-    for x in capitals.values():
-      print(x)
+To delete a key value pair we use the `del` operator on the key
 
-To get a list of the `(key, values)` pairs we can use `.items()` method alongside the `for k, v in my_dic.items():`
+    mason_marks = {'Quiz 1': 60, 'Quiz 2': 70, 'Quiz 3': 80}
 
-    capitals = {'USA' : 'Washington DC',
-        'India' : 'New Dehli',
-        'China' : 'Beijing',
-        'Russia' : 'Moscow'}
+    del mason_marks['Quiz 1']
 
-    for k,v in capitals.items():
-      print(k, v)
+We can see whether a key exists or not by using the `in` and `not in` operator
 
+    marks = {
+        'Quiz 1': 85, 
+        'Quiz 2': 90, 
+        'Assignment 1': 72, 
+        'Assignment 2': 50,
+    }
+
+    if 'Quiz 2' in marks:
+        print('The student has taken Quiz 2') # this does print
+        
+    if 'Quiz 3' not in marks:
+        marks['Quiz 3'] = 94 # creates 'Quiz 3' key and assigns the value 94
+
+    print(marks['Quiz 3'])
+
+We can also use the `len()` function to get the length of the dictionary. Not as useful than it is for lists. 
+
+    mason_marks = {'Quiz 1': 60, 'Quiz 2': 70, 'Quiz 3': 80}
+    print(len(mason_marks)) # prints 3 
+
+The `dict()` function like the `list()` function creates a new dictionary if not arguments are passed in: 
+
+    x = {}
+    x = dict() # equivalent to above
+
+If passed in an existing dictionary, it creates a new dictionary. Not a reference
+
+    x = { 'Alice': 0, 'Bob': 1 }
+    y = dict(x)
+    y['Eve'] = 99
+
+    print('x', x)
+    print('y', y)
+
+As we said before, we can do the same thing with the `.copy()` method. 
+
+    x = { 'Alice': 0, 'Bob': 1 }
+    y = x.copy()
+    y['Eve'] = 99
+
+    print('x', x)
+    print('y', y)
+
+If we try and just access (**_not assign_**) then we run into an error if the key doesnt exist 
+
+    inventory = {'wood': 10, 'water': 12, 'gold': 2} 
+    print(inventory['wood']) # prints 10
+    print(inventory['silver']) # throws an error
+
+So because of that, we should check whether we have the key before continuing
+
+
+    inventory = {'wood': 10, 'water': 12, 'gold': 2} 
+    item = 'copper'
+    if item in inventory: 
+        print(inventory[item])
+    else: 
+        print('You don\'t have any copper')
+
+We can iterate over dictionaries using the same syntax we use for lists and list-like objects.
+
+    prices = {
+        'bread': 2.00,
+        'cheese': 5.50,
+        'milk': 2.79,
+    }
+
+    # This prints all the keys of the dictionary
+    for item in prices:
+        print(item)
+
+If we want to loop over the values,  can access them explicitly using the keys, like this:
+
+    prices = {
+        'bread': 2.00,
+        'cheese': 5.50,
+        'milk': 2.79,
+    }
+
+    # This prints all the keys with their associated value
+    for item in prices:
+        print(item, prices[item])
+
+Since this is such a common operation, we can use the `.items()` funciton provided by the dictionary.
+
+    prices = {
+        'bread': 2.00,
+        'cheese': 5.50,
+        'milk': 2.79,
+    }
+
+    # This prints all the keys with their associated value
+    for k, v in prices.items():
+        print(k, v)
+
+list of tuples $\implies$ dictionary (with `dict()` function)
+
+    scores = [('Alice', 1), ('Bob', 2), ('Eve', 4), ('Mallory', 99)]
+    scores = dict(scores)
+
+    print(scores)
+
+dictionary $\implies$ list of tuples (with `list()` and `.items()` function)
+
+    scores = {'Alice': 1, 'Bob': 2, 'Eve': 4, 'Mallory': 99}
+    scores = list(scores.items())
+
+    print(scores)
+
+This is useful since we may wish to print the contents of a dictionary in a particular order.
+
+    # Suppose we want to order the names based on their scores.
+    scores = {'Alice': 1, 'Bob': 2, 'Eve': 4, 'Mallory': 99}
+    scores = list(scores.items())
+
+    # We'll explain how this works in a later chapter.
+    scores.sort(key=lambda x: x[1], reverse=True)
+    print(scores)
+
+We've seen how we can create lists using list comprehensions. There is a similar operation for dictionarys.
+
+
+The syntax is the almost the same with for loop at its core, the only difference is the use of curly braces and the need to supply a key as well as a value.
+
+    # Create a dictionary where each key is numeric
+    # and is paired with their corresponding value as a string
+    d = { x: str(x) for x in range(5) }
+
+    print(d)
 # functions, default values and first class functions
 To make a function it's like this:
 
