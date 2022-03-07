@@ -11,14 +11,15 @@
 10. [for loop, ranges and continue](#10)
 11. [Nested loops and for-else](#11)
 12. [lists](#12)
-13. ['=' vs .copy()](#13)
-14. [str.split() and str.join()](#14)
-15. [enumerate()](#15)
-16. [2D lists](#16)
-17. [tuples](#17)
-18. [sets](#18)
-19. [dictionaries](#19)
-20. [functions, default values and first class functions](#20)
+13. [list membership and comprehension](#13)
+14. ['=' vs .copy()](#14)
+15. [str.split() and str.join()](#15)
+16. [enumerate()](#16)
+17. [2D lists](#17)
+18. [tuples](#18)
+19. [sets](#19)
+20. [dictionaries](#20)
+21. [functions, default values and first class functions](#21)
 
 
 # print, type and variables <a name=""></a>
@@ -370,9 +371,11 @@ To remove the last element use the `.pop()` method.
 
 To insert at an index use the `.insert(index_num, <val>)` method. 
 
-To sort a list use the `.sort()` method. 
+To sort a list use the `.sort()` method. This sorts the existing list. `sorted(list)` returns a new list
 
 To clear a list use the `.clear()` method. 
+
+To find the length of a list use the `len()` function
 
 
   
@@ -392,17 +395,71 @@ To use the `.sort()` method, all the types in your list have to be the same:
     my_list = ["bbb", "dd", "a", "c", "e"]
     my_list.sort() # sorted aplhanumerically
 
-Lists support conditionals with the `in` keyword:
-    
+    my_list = [5, 4, 3, 2, 1]
+    my_list.sort(reverse =  true) # sorts descending
+
+# List membership and comprehension
+check list membership with the `in` and `not in` operators
+
     letters = ["a", "b", "c"]
     if "a" in letters: 
-      print("first letter is in the list")
+      print("a is in the list")
 
-Recall that if you have a set $A = \{1,2,3,4\}$ and you also hava a set $B = \{x^2 \mid x \in A\}$ we can also write this inpyton like so: 
+    if "d" not in letter: 
+      print("d is not in the list")
 
-    A = [1, 2, 3, 4]
-    B = [x**2 for x in A] # [1, 4, 9, 16]
+List comprehension is just another way of writing a for loop for list creation - all in one line. Everything that can be done in list comprehension can be done with the normal for loop.
 
+For example: 
+
+    l = []
+    for i in range(10):
+        l.append(i * i)
+    print(l)
+
+is the same as: 
+
+    l = [i * i for i in range(10)]
+    print(l)
+
+example 2: converting list of strings to list of integers
+
+    strings = ['1', '9', '27']
+    l = [int(s) for s in strings]
+    print(l)
+
+example 3: we can also add conditionals to our list comprehension to act as a filter. 
+
+    # numbers from 1-100 divisible by 3
+    l = [i for i in range(1, 101) if i % 3 == 0]
+    print(l)
+
+Which is the same as: 
+
+    # numbers from 1-100 divisible by 3
+    l = []
+    for i in range(1, 101):
+        if i % 3 == 0:
+            l.append(i)
+    print(l)
+
+example 4: filter a list of integers for the integers greater than 5
+
+    x = [10, 4, 2, 9, 11, 1]
+    y = [n for n in x if n > 5]
+    print(y)
+
+example 5: nested for loops in the list comprehension syntax
+
+This: 
+    l = []
+    for x in range(5):
+        for y in range(5):
+            l.append(x + y)
+
+and this are the same: 
+
+    print([ (x+y) for x in range(5) for y in range(5)])
 # '=' vs .copy() for lists <a name = ""></a>
 when we use the `=` operator, we are passing a `memory address` around. So when when change one of the elements at this memeory address it changes all other things referencing it. 
 
@@ -516,36 +573,69 @@ We can also do multiple assignments with tuples and lists:
     name, age = student_two
     print(name, age)
 # sets <a name = ""></a>
-To make a set use `{}` curly brackets. They are **unordered** and **unindexed**. To show unordered-ness:
-    
-    # run this 10 times. The order of the access will be different. 
-    set = {"abcd", "cdef", "efgh", "ijkl"}
-    for x in set:
-        print(x)
+To make a set use `{}` curly brackets. They are **unordered** and **unindexed**. 
 
-Accessing elements in a set is much faster than a list:
+Sets: 
 
-    # this will print 'hello world'
-    set = {"abcd", "cdef", "efgh", "ijkl"}
-    if "abcd" in set: 
-      print("hello world")
+- are a collection of *unique* values
+- Use `{}` to create them 
 
-The methods which update the current set always return `None`. They update and that's it.
 
-    even = {2, 4, 6, 8}
-    odd = {1, 3, 5, 7}
-    print(even.add(10)) # even = {2,4,6,8,10}
-    print(even.remove(10)) # even = {2,4,6,8}
-    print(even.clear()) # even = {}
-    print(even.update(odd)) # even = {1,3,5,7}
+Sets can contain integers, float, tuple, string, and even a combination of elements.
 
-The methds like `.union`, `.intersection`, `.difference` don't update our sets and return the sets from the math operations of $\bigcup$, $\bigcap$ and $\setminus$
+    s = {4, 30, 2, 10, 10, 4} # notice the duplicate 4 and 10
+    print(s) # duplicates appear ONCE
 
-    primes = {2, 3, 5, 7}
-    dice = {1, 2, 3, 4, 5, 6}
-    print(dice.union(primes)) # {1,2,3,4,5,6,7}
-    print(dice.insersection(primes)) # {2,3,5}
-    print(dice.difference(primes)) # {1,4,6}
+    s = {'a', 'b', 'c'}
+    print(s)
+
+    s = {'a', 1}
+    print(s)
+
+To add elements use the `.add()` function
+
+    s = {4, 30, 2, 10, 10, 4}
+    s.add(7) # adds 7
+    s.add(7) # doesn't add the duplicate
+    print(s) 
+
+To add *mulitple* elements use the `.upddate()` method.  
+
+    s = {4, 30, 2, 10, 10, 4}
+    s.update([4, 3, 3]) # input can be a LIST
+    print(s)
+
+    s.update({100, 55}) # input can be a SET
+    print(s)
+
+    s.update((12, 96)) # input can be a TUPLE
+    print(s)
+
+use `.len()` to find the size of the set and use the operators `in` and `not in` to test for set membership
+
+    colours = {'blue', 'green', 'red'}
+    print(len(colours))
+    print('red' in colours)
+    print('red' no in colours)
+
+The first way to delete an item from a set is `.remove(item)`
+
+- It throws an *error* if the item isn't in the list 
+
+      colours = {'blue', 'green', 'red'}
+      colours.remove('blue') # removed
+      print(colours)
+      colours.remove('yellow') # error!
+
+The second way is the `.discard(item)` function. 
+
+- It leaves a set unchanged if the item doesn't exist
+
+      colours = {'blue', 'green', 'red'}
+      colours.discard('blue') # removed
+      colours.discard('yellow') # safe
+      print(colours)
+
 # dictionaries <a name = ""></a>
 A dictionary is a collection of {key:value} pairs. It is similar to a set in the sense that the `keys` cannot be repeated. Note that with `lists` and `tuples` are **ordered** whereas `dictionaries` and `sets` are **unordered**
 
