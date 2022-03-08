@@ -20,6 +20,7 @@
 19. [sets](#19)
 20. [dictionaries](#20)
 21. [functions, default values and first class functions](#21)
+22. [generators](#22)
 
 
 # print, type and variables <a name=""></a>
@@ -599,7 +600,7 @@ To add elements use the `.add()` function
     s.add(7) # doesn't add the duplicate
     print(s) 
 
-To add *mulitple* elements use the `.upddate()` method.  
+To add *mulitple* elements use the `.update()` method.  
 
     s = {4, 30, 2, 10, 10, 4}
     s.update([4, 3, 3]) # input can be a LIST
@@ -636,6 +637,73 @@ The second way is the `.discard(item)` function.
       colours.discard('yellow') # safe
       print(colours)
 
+Convert list $\implies$ set
+
+    colours = ['blue', 'green', 'red', 'blue', 'blue']
+    print(set(colours)) # gets rid of duplicates
+    print(colours) # still has duplicates cause it's a list
+
+convert set $\implies$ list
+
+    colours = {'blue', 'green', 'red', 'blue', 'blue'}
+    print(list(colours)) # set had no duplicates so list has no duplicates
+    print(colours)
+
+You can use the `sorted(set)` function on a set. This returns a `list`
+
+    colours = ['blue', 'green', 'red', 'blue', 'blue']
+    colours = set(colours)
+    print(sorted(colours))
+
+For subsets or supersets: 
+
+Suppose `setOne = {'a', 'b', 'c'}` and `setTwo = {'a', 'b'}`
+
+- `setOne.issubset(setTwo)` $\iff$ `setOne <= setTwo` returns `false`
+- `setOne.issuperset(setTwo)` $\iff$ `setOne >= setTwo` returns `true`
+
+Clearly the operators are easier to work with. We can check strict subset or superset with 
+- `setOne < set_Two # is setOne a proper subset of setTwo` returns `false`
+- `setOne > set_two # is setOne a proper superset of setTwo` returns `true`
+
+The following operations return a new set and don't change the underlying sets. 
+
+- For unions use the `setOne.union(setTwo)` or `setOne | setTwo`
+
+      x = {'red', 'green', 'blue'}
+      y = {'red', 'yellow', 'blue'}
+
+      print(x.union(y))
+      print(x | y)
+
+- For intersetion use the `setOne.intersection(setTwo)` or `setOne & setTwo`
+
+
+      x = {'red', 'green', 'blue'}
+      y = {'red', 'yellow', 'blue'}
+
+      print(x.intersection(y))
+      print(x & y)
+
+- For difference use the `setOne.difference(setTwo)` or `setOne - setTwo`. This operations *isn't commutative*. 
+
+      x = {'red', 'green', 'blue'}
+      y = {'red', 'yellow', 'blue'}
+
+      print(x.difference(y))
+      print(x - y)
+
+      print(y.difference(x))
+      print(y - x)
+
+- For symmetric difference = $\{x \mid x \notin A\cap B\}$ = not in their intersection  use the `setOne.symmetric_difference(setTwo)` or `setOne ^ setTwo`
+
+
+      x = {'red', 'green', 'blue'}
+      y = {'red', 'yellow', 'blue'}
+
+      print(x.symmetric_difference(y))
+      print(x ^ y)
 # dictionaries <a name = ""></a>
 A dictionary is a collection of {key:value} pairs. It is similar to a set in the sense that the `keys` cannot be repeated. Note that with `lists` and `tuples` are **ordered** whereas `dictionaries` and `sets` are **unordered**
 
@@ -907,3 +975,7 @@ We can pass functions as arguments
     # Here, we pass the `add` function as `f` into the operate function
     print(operate(add, 1, 2))
     print(operate(mul, 1, 2))
+
+# generators
+
+
