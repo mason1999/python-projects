@@ -978,4 +978,124 @@ We can pass functions as arguments
 
 # generators
 
+If you remember from the beginning of the course, we've said that the  `range()` function does not return an actual list. 
 
+    # this outputs 'range(0, 10)'
+    print(range(10))
+
+    # this outputs [0,1,2,3,4,5,6,7,8,9]
+    # the list() function uses the generator to return a list
+    print(list(range(10))) 
+
+This is because `range()` is actually a *generator function*. It returns a *generator* that when iteratred, which returns the sequence. 
+
+We can create our own generators using functions.
+
+Simple example of a generator. It uses `yield` instead of `return`
+
+    def g():                              # line 1
+        print('Entering generator 1')       # line 2
+        yield 1                           # line 3
+        print('Back in the generator 2')    # line 4
+        yield 2                           # line 5
+                                          # line 6
+    for x in g():                         # line 7
+        print(x)                          # line 8
+
+- **line 1**: The `g()` function is defined, execution skips to **line 7**
+- **line 7**: The for loop is evaluated, Python calls `g()` to determine the value to iterate
+- **line 2**: The execution enters `g()`
+- `Entering generator 1` is printed
+- **line 3**: `yield` keyword sends the value `1` out of the generator, this is consumed by the for loop, `1` is placed into the value of `x` and execution jumps back to **line 8**
+- `1` is outputted
+- **line 7**: for loop looks for the next value of generator, execution resumes in the generator function back to **line 4**
+- **line 4**: print is executed
+- `Back in the generator 2` is outputted
+- **line 8**: `yield` sends `2` out of the generator, and is consumed by the for loop, `x` is set to be `2` and execution enters the for block. 
+- **line 8**: print is executed
+- `2` is outputted
+- **line 7**: The generator function block is finished, the for loop ends
+
+IT IS IMPORTANT TO UNDERSTAND THAT THE EXECUTION JUMPS IN AND OUT OF THE GENERATOR AT EACH ITERATION
+
+Example 2: making our own range function: 
+
+    def my_range(n):
+        i = 0
+        while i < n:
+            yield i
+            i += 1
+
+    # The list() function will turn a generator into a real list
+    print(list(my_range(10)))
+
+    for i in my_range(4):
+        print(i)
+
+Example 3: Infinite sequences
+
+    def cycle():
+        i = 0
+        while True:
+            yield i
+            i += 1
+
+    for v in cycle():
+        print(v)
+
+    # Let's stop at 10 since this loop is infinite
+    if v == 10:
+        break
+
+Example 4: commong generators-- the `range()` function
+
+    print(list(range(10)))
+    print(list(range(1,10))) # 0 to 9
+    print(list(range(1,10,2))) # every 2nd number from zero to 9
+
+Example 5: common generators-- the `enumerate()` function. Takes another generator or sequence and pairs it with an increasing sequence
+
+    print(list(enumerate(['A', 'B', 'C'])))
+    print(list(enumerate([])))
+    print(list(enumerate(range(10))))
+
+Example 6: common generators -- the `zip()` function. Takes iterable sequences/generators and returns a generator of tuples. 
+
+
+    print(list(zip([1,2,3], ['A', 'B', 'C'])))
+    print(list(zip(['Alice', 'Bob', 'Eve'], ['First', 'Second', 'Third'])))
+
+    for x, y, z in zip(range(5), range(5,0,-1), 'ABCDEF'):
+        print (x, y, z)
+
+Example 7: Generator comprehensions. The generator comprehension is just like the list comprehension. Except we use parentheses instead of square brackets.
+
+    g = (i * i for i in range(10))
+    for x in g:
+        print(x)
+
+# *Vargs
+This allows us to specify multiple arguments to the same function. We use the `*` splat operator. 
+
+Example 1: 
+
+    def say_hello(*names):
+        # names has type() tuple
+
+        for name in names:
+            print('Hello', name)
+
+    say_hello('Alice')
+    say_hello('Bob', 'Eve')
+
+If the function has more than one parameter, then the last parameter must be the `*varg` parameter. 
+
+    def say_hello(greeting, *names):
+        for name in names:
+            print(greeting, name)
+
+    say_hello('Hello', 'Alice')
+    say_hello('Hi', 'Bob', 'Eve')
+
+# splat
+The splat operator is `*`
