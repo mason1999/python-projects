@@ -21,6 +21,15 @@
 20. [dictionaries](#20)
 21. [functions, default values and first class functions](#21)
 22. [generators](#22)
+23. [varargs](#23)
+24. [splat](#24)
+25. [sorting with first class functions](#25)
+26. [lambda expressions](#26)
+27. [nested functions and nonlocal](#27)
+28. [default values](#28)
+29. [keyword arguments](#29)
+30. [the sep and end parameters](#30)
+31. [kwargs: arguments in the form of a dictionary](#31)
 
 
 # print, type and variables <a name=""></a>
@@ -1074,7 +1083,7 @@ Example 7: Generator comprehensions. The generator comprehension is just like th
     for x in g:
         print(x)
 
-# *Vargs
+# *Varargs
 This allows us to specify multiple arguments to the same function. We use the `*` splat operator. 
 
 Example 1: 
@@ -1088,7 +1097,7 @@ Example 1:
     say_hello('Alice')
     say_hello('Bob', 'Eve')
 
-If the function has more than one parameter, then the last parameter must be the `*varg` parameter. 
+If the function has more than one parameter, then the last parameter must be the `*varargs` parameter. 
 
     def say_hello(greeting, *names):
         for name in names:
@@ -1098,4 +1107,237 @@ If the function has more than one parameter, then the last parameter must be the
     say_hello('Hi', 'Bob', 'Eve')
 
 # splat
-The splat operator is `*`
+The splat operator is `*`. We've seen how varargs can implicitly pass in a tuple to a function, we can also use the splat operator to pass in an iterable to a varargs function. 
+
+The `*` operator basically turns an iterable into variable arguments
+
+    def say_hello(greeting, *names):
+        for name in names:
+            print(greeting, name)
+
+    # a list of names
+    guests = ['Alice', 'Bob', 'Eve', 'Mallory']
+
+    # turns guests into varargs
+    say_hello('Welcome', *guests) # same as say_hello('Welcome', 'Alice', 'Bob', 'Eve', 'Mallory')
+
+The `*` in front of `guests` unpacks the sequence into the vararg argument. 
+
+This allows us to use a neat trick with `zip()`
+
+    # zip two lists together
+    result = list(zip([1,2,3,4], ['Alice', 'Bob', 'Eve', 'Mallory']))
+    print(result)
+
+    # unzip the lists
+    x, y = tuple(zip(*result))
+    print(x, y)
+
+# Sorting with first class functions
+We've seen how to use the sorted function to sort lists and other iterables. What if we want to customise the sorting order?
+
+    # Suppose we want to sort this list by length
+    xs = ['Alice', 'Bob', 'Eve', 'Mallory']
+
+The `sorted` function allows us to set a `key` parameter,  this is a function that will return a value that will be compared to determine the sorting order. `sorted` passes each element of the list into the function specified in the `key`  parameter. 
+
+
+    xs = ['Alice', 'Bob', 'Eve', 'Mallory']
+
+    def sort_key(x):
+        return len(x)
+
+    print(sorted(xs, key=sort_key))
+
+By default, tuples are sorted by lexographical order. If we want to sort a list of tuples by the second element, we'll need to again use a sort key.
+
+
+    xs = [('Alice', 200), ('Bob', 24), ('Eve', 100), ('Mallory', 99)]
+
+    def sort_key(x):
+        return x[1]
+
+    print(sorted(xs, key=sort_key))
+
+# lambda expressions
+
+
+In Python, lambda expressions are used to create an anonymous function, which a function is defined without a name. They can have any number of arguments but they must be written in a single line.
+
+Here's how you'd define an anonymous function with lambda expressions:
+
+    lambda parameters: expression
+
+which behaves in the same way as: 
+
+    def <lambda> (parameters):
+        return expression
+
+Let's take a look at a couple of examples. 
+
+    # working with a single parameter
+    square = lambda x: x ** 2
+    print(square(17))
+
+    # working with multiple parameters
+    remainder = lambda x, y: x % y
+    print(remainder(243, 5))
+
+This also allows to simplify our sorting example:
+
+    xs = [('Alice', 200), ('Bob', 24), ('Eve', 100), ('Mallory', 99)]
+
+    print(sorted(xs, key=lambda x: x[1]))
+
+# Nested functions and nonlocal
+We can define function inside functions. This allows us to create helper functions that have access to local variables:
+
+    def f():
+        x = 1
+        # Define `g` inside `f`
+        # Scope rules apply just like variable definitions
+        # `g` is only visible in `f`
+        def g():
+            # Notice that we can access `x`, a variable defined
+            # in the enclosing scope.
+            print(x)
+        x = 2
+        g()
+        
+    f()
+
+If we wish to write to a variable in the enclosing scope, we need to use the `nonlocal` keyword, otherwise Python thinks we are trying to create a local variable.
+
+    def f():
+        x = 1
+
+        def g():
+            # Python thinks we want to make
+            # a new variable named x inside `g`
+            x = 4
+
+        g()
+        print(x) # prints 1
+
+    f()
+
+We just need to mark the variable as `nonlocal`:
+
+    def f():
+        x = 1
+
+        def g():
+            nonlocal x
+            
+            # Now it will work
+            x = 4
+
+        g()
+        print(x) # prints 4
+
+    f()
+
+# Default values
+Python has a neat trick which allows us to write functions which don't `require` certain parameters - but we can still specify them if we want to. Consider this program which takes a name as a parameter, and greets the person:
+
+    def greet(name):
+        print(f'Hello, {name}!')
+        
+    greet('Jacob')
+
+It might be nice for our function to be able to greet the user in other languages, too - but maybe we just want to stick with English if no language is specified. We can achieve this effect like so:
+
+
+    def greet(name, greeting='Hello'): # default val: 'Hello'
+        print(f'{greeting}, {name}!')
+        
+    greet('Jacob')
+    greet('Jacob', 'Ciao')
+
+# keyword arguments and default values
+Python allows us to make explict the value we put into each parameter using *keyword* arguments.
+
+Suppose we had a function that printed out an inventory and has many parameters. 
+
+    def print_inventory(copper, silver, gold, iron, stone):
+        print(f'Copper: {copper}')
+        print(f'Silver: {silver}')
+        print(f'Gold: {gold}')
+        print(f'Iron: {iron}')
+        print(f'Stone: {stone}')
+
+    print_inventory(4, 2, 1, 6, 10) # which items do these numbers correspond to?
+
+It can be easy to forget which order the parameters go. This is the kind of situation where keyword arguments would come in handy.
+
+    def print_inventory(copper, silver, gold, iron, stone):
+        print(f'Copper: {copper}')
+        print(f'Silver: {silver}')
+        print(f'Gold: {gold}')
+        print(f'Iron: {iron}')
+        print(f'Stone: {stone}')
+
+    print_inventory(stone=10, copper=4, iron=6, silver=2, gold=1) # easier to read
+
+Since these *keyword* arguments are identified by keys (eg. `stone`), we can have some freedom with the order in which we pass these arguments.
+
+**Interaction with default values**
+
+The keyword argument syntax works well with default values.
+
+The code below sets a default value of `0` for all parameters. Two keyword parameters are passed in with values 10 and 4. It's good because they're optional!
+
+    def print_inventory(copper=0, silver=0, gold=0, iron=0, stone=0):
+        print(f'Copper: {copper}')
+        print(f'Silver: {silver}')
+        print(f'Gold: {gold}')
+        print(f'Iron: {iron}')
+        print(f'Stone: {stone}')
+
+    print_inventory(stone=10, copper=4)
+
+# the sep and end parameters
+In Python, the `print` function can take multiple arguments and concatenate values of the same type. The `sep` and end parameters are useful formatting tools to render the printed statements neat to look at.
+
+    # default value for sep
+    print('Python', 'is', 'awesome', sep=' ')
+
+    # add a symbol between strings
+    print('Python', 'is', 'awesome', sep=' ! ')
+
+    # add a character between strings
+    print('Python', 'is', 'awesome', sep='y')
+
+By now, you may have noticed that the print method always ends with a newline. What if you didn't want a newline after your print statement? 
+
+The `end` parameter allows us to append any string at the end of the output of the `print` statement. Passing the whitespace to it will indicate to the Python interpreter to end the statement with whitespace instead of a newline.
+
+
+    # end the statement with whitespace
+    print('Python', end=' ')
+    print('is', end=' ')
+    print('awesome')
+
+    # end the statement with any value
+    print('Python', end=' ')
+    print('is', end=' awesome')
+
+# kwargs: arguments in the form of a dictionary
+Sometimes it is convenient for a function to receive its arguments in the form a dictionary.
+
+We can specify that an argument is a *kwarg* by putting a double splat in front of it.
+
+    def f(**kwargs):
+        print(kwargs)
+
+    f(x='1', y='2', z='3')
+
+This allow even the names of the function arguments to be varied by the caller.
+
+Here is another example:
+
+    def print_inventory(**inventory):
+        for item in inventory:
+            print(f'{item}: {inventory[item]}', end = '; ')
+
+    print_inventory(stone=10, copper=4, iron=6, silver=2, gold=1, wood=100)
