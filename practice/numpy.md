@@ -131,6 +131,20 @@ import numpy as np
     print(y.dtype)
     print(y ** 100) # Notice that np.int64 has overflowed into a negative value
 
+**COMPARISON WITH NORMAL PYTHON INTS**
+
+    import numpy as np
+    x = 2
+    n = 62
+    y = np.array([x],dtype=np.int64)
+
+    for i in range(3):
+        print(f'{x}**{n+i}:')
+        print(6*'-')
+        print('Python int:',x**(n+i))
+        print('int64     :',y[0]**(n+i))
+        print(30*'-')
+
 # arange, linspace
 
 We can 'generate' values for an ndarray by using the `np.arange` function. The `np.arange` function is analogous to our `range` function. It accepts and interprets parameters in a similar way to `range`.
@@ -228,6 +242,12 @@ We can 'reshape' an existing ndarrays into a new ndarrays with different dimensi
 
     # reshape into an 2x6 array
     print(a.reshape(2, 6))
+
+    # reshape into a 1x12 array 
+    print(a.reshape(1, 12))
+
+    # reshape into a 12 length array
+    print(a.reshape(12, ))
 
 If the number of elements of the requested array doesn't match the number of elements in the original ndarray, NumPy will give us an error.
 
@@ -366,16 +386,37 @@ Both `<axis> (int)` and `<out> (ndarray)` are optional parameters
 
 
     import numpy as np
-    a = np.array([[1, 2], [3, 4]])
-    b = np.array([[5, 6]])
+    a = np.array([
+                    [0, 0, 0, 0], 
+                    [1, 1, 1, 1]
+                ])
 
-    # Join a and b on axis 0
+    # to be joined below a. After joining
+    # a will be a 4 x 4 matrix
+    b = np.array([
+                    [7, 7, 7, 7],
+                    [7, 7, 7, 7]
+                ]) 
+
     x = np.concatenate((a, b), axis = 0)
+    
+    # to be goined to the right of a
+    c = np.array([
+                    [3, 3],
+                    [4, 4],
+                    [5, 5], 
+                    [6, 6]
+                ])
+    # join to a, the matrix b of 2 x 4 on the rowise axis
+    # a will be 4 x 4 after this
+    # then join to the result the 4 x 2 matrix on the columnwise axis
+    x = np.concatenate((a, b), axis = 0)
+    x = np.concatenate((x, c), axis = 1)
     print(x)
-
-    # Join a and b as a one-dimensional array
-    x = np.concatenate((a, b), axis = None)
-    print(x)
+    
+    # join a, b and c as a one-dimensional array
+    y = np.concatenate((a, b, c), axis = None)
+    print(y)
 
 # indexing
 There are two main ways which we can index ndarrays.
@@ -439,6 +480,35 @@ We first look at the 0th value in each of the arrays (`0` and `0`), then the 1st
 
     [1, 4, 8]
 
+Example: 
+
+
+    import numpy as np
+
+    a = np.arange(9).reshape(3, 3)
+    print(a, "\n")
+    # [
+    #     [0, 1, 2], 
+    #     [3, 4, 5], 
+    #     [6, 7, 8]
+    # ]
+
+    # these two are equivalent
+    x1 = np.array([a[0, 0], a[1, 2], a[2, 1]])
+    x2 = a[[0, 1, 2], [0, 2, 1]]
+
+    # the 0th row of a 
+    print(a[0], "\n")
+
+    # the 1st-2nd row of a
+    print(a[1:], "\n")
+
+    # the 1st column of a
+    print(a[:, 1], "\n")
+
+    # the 2nd columnd of a
+    print(a[:, 2], "\n")
+
 # boolean masking
 
 A powerful feature of NumPy is to isolate and select a particular subset of data using a Boolean masking operation, which tests whether an array satisfies a certain condition.
@@ -472,7 +542,8 @@ What's more, is that you can pick out the values that meet the cutoff. We can pa
     # [[False False False]
     #  [False False True]
     #  [True  True  True]]
-
+    
+    print(b[b > 5])
     # outputs [6 7 8 9]
 
 See how it returns all the values in positions at which the mask array is `True` in a one-dimensional array? This trick will save you a lot of time and the hassle of looping through each and every element.

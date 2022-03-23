@@ -253,6 +253,8 @@ If this happens, make sure you are using the `&` and `|` bitwise operators inste
 
 DataFrames are labelled two-dimensional data. They can be thought of as a list of `Series` with a shared index, they allow us to represent tabular data.
 
+- Note that while `DataFrame` can be created by a list of dictionaries, the  `keys` become the COLUMNS. Previously, the `keys` became the ROWS (indices) for a series. 
+
 Let's create a `DataFrame` from a list of dictionaries:
 
     import pandas as pd
@@ -872,6 +874,46 @@ We can assign columns using the `[]` to select the column:
     1955           0.0               0            100.000
     1960           0.0               0            100.000
 
+**SUMMARY**
+
+- `df.loc[<logical vector>]` : obtain rows with *all* columns
+  
+  - `df.loc[[True, True, False, False, True]]` : get 0th, 1st and 5th row
+  - `df.loc[df['var1'] > 50]` : get all rows where `var1` is greater than 50
+
+- `df.loc[<logical vector>, <list of variables>]` : obtain rows with *some* columns
+  
+  - `df.loc[[True, True, False, False, True], [True, False, True]` : get 0th, 1st and 5th row alongside 0th and 2nd column 
+  - `df.loc[(df['var1'] > 50) & (df['var2'] < 2), ['var1', 'var2']]`: Get the rows where `var1` is greater than 50 and the rows where `var2` is less than 2. Only select the `var1` and `var2` columns. 
+
+- Note that `df['var1'] = df.loc[:, 'var1']` so you could just use `df.loc[]` for subsetting rows and columns!
+
+Example: 
+
+    # select 'Food/Tobacco column' 
+    print(df['Food/Tobacco'], "\n") 
+    # select 'Food/Tobacco column' using df.loc
+    print(df.loc[:, 'Food/Tobacco'], "\n") 
+    # select the 1940 row
+    print(df.loc[1940]) 
+    # select the 1940 and 1950 row
+    print(df.loc[[1940, 1950]]) 
+    # select 1955 and 1960 rows and 'Food/Tobacco' and 'Medical/Health' colums
+    print(df.loc[[1955, 1960], ['Food/Tobacco', 'Medical/Health']]) 
+
+    # get all observations which have 'Food/Tobacco' > 50
+    print(df.loc[df['Food/Tobacco'] > 50], "\n")
+    print(df.loc[df.loc[:, 'Food/Tobacco'] > 50], "\n")
+    
+    # get all observations which have 
+    #'Food/Tobacco' > 50 OR  'Medical/Health' > 5
+    print(df.loc[(df['Food/Tobacco'] > 50) | (df['Medical/Health'] > 5) ], "\n")
+    print(df.loc[(df.loc[:,'Food/Tobacco'] > 50) | (df.loc[:,'Medical/Health'] > 5) ], "\n")
+
+    # get all observations which have 
+    # 'Medical/Health' > 10 and select 
+    # 'Food/Tobacco', 'Medical/Health' columns
+    print(df.loc[df['Medical/Health'] > 10, ['Food/Tobacco', 'Medical/Health']])
 # missing data
 
 
@@ -894,7 +936,7 @@ In Pandas, missing data values are represented using `np.nan`
     print(df.isna(), "\n") # return a dataframe of booleans telling where the NaN's are
 
 - `.dropna()`: We can remove all rows containing missing values with the `.dropna()` function. This returns a new `DataFrame` with those rows removed. We can optionally choose to drop columns instead of rows if we desire.
-- `.fillna()`: We can also fill the missing values with a specified value. Here we use `.fillna()` to fill all missing values with 0.
+- `.fillna()`: We can also fill the missing values with a specified value. Here we use `.fillna(0)` to fill all missing values with 0.
 - `np.isna()`: `isnan` is a function provided by NumPy to check if a value is a NaN.
 
       >>> np.isnan(np.nan)
@@ -959,8 +1001,8 @@ We can interate through the variables in a dataframe with a `for` loop
 
     print(df, "\n")
 
-    for x in df:
-        print(x)
+    for x in df: # x takes the value of the variable/columns
+        print(x) # prints 'Name', 'Age', then 'Gender'
 
 We can iterate through every row in the `DataFrame` using `.iterrows()`
 
@@ -978,16 +1020,53 @@ We can iterate through every row in the `DataFrame` using `.iterrows()`
     print(df, "\n")
 
     for index, row in df.iterrows():
-        # Each rows is returned as a separate pd.Series
         print(type(row))
 
-        # We can get values from the row by using the [] operator
-        print(index, row['Name'])
-        print(index, row['Age'])
-        print(index, row['Gender'])
+        # see the indices of the series
+        print(row.index) 
+        # change the indices
+        row.index = ['NAME', 'AGE', 'GENDER']
+        # get the type ==> should be 'object'
+        print(row.dtype) 
+        # print out the name and gender of each row. 
+        # should also print out 'Name: 1, dtype: object'
+        print(row[['NAME', 'AGE']]) 
+        for x in row: # print out the values of our row
+            print(x) # prints Bob, 25, M (e.g)
+        print(row.sort_index()) # sort by index
+        print("---------------")
 
 Note: since every row returned is a `Series` created anew, you should not modify the `DataFrame` by changing the row that is returned. Depending on the data type contained within the `DataFrame`, it may or may not work.
 # .at and .iat
+While the `df.loc[]` and `df.iloc[]` target rows and columns, we can get indivudal cells with `df.at[<index name>, <column name>]` and `df.iat[index, column]`. The difference is betwen using the actual names or the indicies.
+
+    import pandas as pd
+
+    df = pd.DataFrame({
+        'Food': [22.200, 44.500, 59.60, 73.2, 86.80],
+        'Med': [3.530, 5.760, 9.71, 14.0, 21.10],
+        'School': [0.341, 0.974, 1.80, 2.6, 3.64]
+    }, index=[1940, 1945, 1950, 1955, 1960])
+
+    # Try the functions below by uncommenting them
+
+    # print the data frame out 
+    print(df, "\n")
+
+    # print the cell at index 1940 in the 'Food' column
+    print(df.at[1940, 'Food'], "\n")
+
+    # change the cell value to 0
+    df.at[1940, 'Food'] = 0
+
+    # use indices to get the value
+    print(df.iat[3, 2], "\n")
+
+    # use indices to change the value
+    df.iat[3, 2] = 1234
+
+    # print out the data frame again. 
+    print(df, "\n")
 # group by
 # combining and axis
 # joining with merge(#20)
