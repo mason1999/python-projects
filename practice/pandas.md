@@ -1068,8 +1068,104 @@ While the `df.loc[]` and `df.iloc[]` target rows and columns, we can get indivud
     # print out the data frame again. 
     print(df, "\n")
 # group by
+
+Remember: 
+
+- That `df['var1']` is the same as `df.loc[:, 'var 1']` and that it returns a series. 
+- We can use methods like `.mean()`, `.max()`, `.sum()`, `.min()` on these series
+
+  - `df['var1'].mean()` for example
+
+- We can access multiple columns with a list **AND THEN** apply the method `.mean()` on it (for example)
+
+  - `df[['var1', 'var2']].mean()` : returns mean of `var1` and `var2`
+
+- We can use `.groupby('var1')` or `.groupby(['var1', 'var2'])` to group by a single or multiple variables
+- We can then select the column or columns in which we want to find something about
+
+  - `df.groupby('var1')['var2'].mean()` : group by `var1` and find the mean across the `var2` column
+  - `df.groupby(['var1', 'var2'])[['var2', 'var3']].mean()` : group by `var1` and `var2`and find the mean across the `var2` and `var3` columns
+
 # combining and axis
-# joining with merge(#20)
+In summary: 
+
+- use the `pd.concat([x, y])` to join two series or data frames together
+- you can use the `axis` parameter to know which axis to joing along. 
+
+  - `axis = 0` means to join along the horizontal axis (--)
+  - `axis = 1` means to join along the vertical axis (|)
+
+Example: joining series
+
+    import pandas as pd
+
+    # can join two series together with pd.concat([series_1, series_2])
+    x = pd.Series([1, 2])
+    y = pd.Series([3, 4])
+
+    # the indices will be repeated. We show this by printing out the 
+    # value(s) at index 1. It will yield 2 values. 
+    z = pd.concat([x, y])
+    print(z, "\n")
+    print(z[1])
+
+Example: joining data frames: 
+
+    import pandas as pd
+
+    # using pd.concat([df1, df2]) : joins df2 along rows of df1
+    df1 = pd.DataFrame({
+                           'eating' : [22.200, 44.500, 59.60],
+                           'medicine': [3.530, 5.760, 9.71],
+                           'study': [0.341, 0.974, 1.80]
+                       },
+                       index = [1940, 1945, 1950])
+
+    print(df1, "\n")
+
+
+    df2 = pd.DataFrame({
+                           'eating' : [73.2, 86.80],
+                           'medicine': [14.0, 21.10],
+                           'study': [2.6, 3.64]                   },
+                       index = [1955, 1960])
+
+    print(df2, "\n")
+
+    df3 = pd.concat([df1, df2])
+    print(df3, "\n")
+
+Example: Using the `axis` parameter
+
+    import pandas as pd
+
+    # using pd.concat([df1, df2]) : joins df2 along rows of df1
+    df1 = pd.DataFrame({
+                           'eating' : [22.200, 44.500, 59.60],
+                           'medicine': [3.530, 5.760, 9.71],
+                           'study': [0.341, 0.974, 1.80]
+                       },
+                       index = [1940, 1945, 1950])
+
+    print(df1, "\n")
+
+
+    df2 = pd.DataFrame({
+                           'eating' : [73.2, 86.80],
+                           'medicine': [14.0, 21.10],
+                           'study': [2.6, 3.64]                   },
+                       index = [1955, 1960])
+
+    df3 = pd.concat([df1, df2])
+
+    print(df3.mean(axis = 0), "\n") # take mean along horizontal axis (--)
+    print(df3.mean(axis = 1), "\n") # take mean along vertical axis (|)
+
+    x = pd.concat([df1, df2], axis = 1) # add along the vertical axis (|)
+    print(df3, "\n")
+    print(x, "\n")
+
+# joining with merge()
 # inner join
 # outer join
 # joining on multiple columns
