@@ -1166,9 +1166,341 @@ Example: Using the `axis` parameter
     print(x, "\n")
 
 # joining with merge()
+Recall that to join two data frames together you can use: 
+
+- `pd.concat()`
+
+
+      import pandas as pd 
+
+      # using `pd.concat()` to make a data frame. 
+      index = [0, 1, 2, 3]
+
+      df1 = pd.DataFrame(['a', 'b', 'c', 'd'], 
+                         index = index,
+                         columns = ['X'])
+      print(df1, '\n')
+
+      df2 = pd.DataFrame(['e', 'f', 'g', 'h'],
+                         index = index,
+                         columns = ['Y'])
+
+      print(df2, '\n')
+
+      print(pd.concat([df1, df2], axis = 1), '\n')
+
+- `[]` to add a column for a data frmae
+
+      df1 = pd.DataFrame(['a', 'b', 'c', 'd'], 
+                         index = index,
+                         columns = ['X'])
+
+      df2 = pd.DataFrame(['e', 'f', 'g', 'h'],
+                         index = index,
+                         columns = ['Y'])
+
+      df1['Y'] = df2['Y']
+      print(df1, '\n')
+
+This is actually a join/merge operation, where we combine two different DataFrames using a column as a key (we're using the index as the key). There is a more general way to combine two DataFrames and that is by using the `pd.merge()` function.
+
+- Note that `pd.merge(df1, df2, on = 'var1')` joins `df2` to the right of `df1` where a common column between `df1` and `df2` is given to the `on` parameter. 
+
+
+      import pandas as pd
+
+      customers = pd.DataFrame([
+          (1, 'Alice', '1 ABC Street'),
+          (2, 'Bob', '2 ABC Street'),
+          (3, 'Eve', '3 ABC Street'),
+      ], columns=['Customer_ID', 'Name', 'Address'])
+      print(customers, '\n')
+
+      orders = pd.DataFrame([
+          (1, 1, 'TV', 100),
+          (2, 1, 'Radio', 50),
+          (3, 3, 'TV', 100),
+      ], columns=['Order_ID', 'Customer_ID', 'Product', 'Quantity'])
+      print(orders, '\n')
+
+      print(pd.merge(orders, customers, on='Customer_ID'))
+
+If we didn't have the same column in `df1` and `df2` we could specify the `left_on` and `right_on` parameters. 
+
+- `left_on` and `right_on` must be the same data type 
+- It'll combine the rows by matching the values from the `left_on` and `right_on` rows.
+- The resultant dataframe will always be smaller (or same size) than the ones which make it up. 
+
+Example 1: 
+
+    import pandas as pd
+
+    df1 = pd.DataFrame({
+                           'name':  ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'], 
+                           'age' : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 
+                           'weight': [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
+                       })
+
+    df2 = pd.DataFrame([
+                           ('D', 6, 'M'),
+                           ('F', 1, 'F'),
+                           ('C', 10, 'M'),
+                           ('J', 3, 'F'),
+                           ('A', 4, 'M'), 
+                           ('H', 8, 'M')
+                       ], columns = ['label', 'time', 'sex'])
+
+    df3 = pd.DataFrame([
+                           ('D', 34, 'M'), 
+                           ('X', 5, 'F'),
+                       ], columns = ['letter', 'num', 'sex'])
+    print(df1, '\n')
+    print(df2, '\n')
+
+    print(pd.merge(left = df1, right = df2, left_on = 'name', right_on = 'label'), '\n')
+    print(pd.merge(left = df1, right = df2, left_on = 'age', right_on = 'time'), '\n')
+    print(pd.merge(left = df2, right = df3, left_on = 'label', right_on = 'letter'),'\n')
+    print(pd.merge(left = df2, right = df3, left_on = 'time', right_on = 'num'),'\n')
+
+Example 2: 
+
+
+    import pandas as pd
+
+
+    orders = pd.DataFrame([
+        (1, 1, 3, 'TV', 100),
+        (2, 1, 1, 'Radio', 50),
+        (3, 3, 3, 'TV', 100),
+    ], columns=['Order_ID', 'Customer_ID', 'Referrer_ID', 'Product', 'Quantity'])
+    print('orders')
+    print(orders, '\n')
+
+    customers = pd.DataFrame([
+        (1, 'Alice', '1 ABC Street'),
+        (2, 'Bob', '2 ABC Street'),
+        (3, 'Eve', '3 ABC Street'),
+    ], columns=['Customer_ID', 'Name', 'Address'])
+
+    print('cusomters')
+    print(customers, '\n')
+
+
+    print(pd.merge(orders, customers, left_on='Order_ID', right_on='Customer_ID'), '\n')
+    print(pd.merge(orders, customers, left_on='Referrer_ID', right_on='Customer_ID'), '\n')
+
+Example 3: Joining on an index 
+
+- To use the index as the column to join on you either have to set the `left_index = True` or `right_index = True` or both. 
+- If we put `left_index = True` then the resultant data frame gets it's indices from the **other** data frame. 
+
+
+      import pandas as pd
+
+      df1 = pd.DataFrame([
+                             ('A', 'a', 1), 
+                             ('B', 'b', 4),
+                             ('C', 'c', 9), 
+                             ('D', 'd', 5), 
+                             ('E', 'e', 2)
+                         ], columns = ['cap', 'low', 'num'])
+
+      df1.index = df1['cap']
+      del df1['cap']
+      print(df1, '\n')
+
+
+      df2 = pd.DataFrame([
+                             ('A', 'aa', 1), 
+                             ('B', 'bb', 4),
+                             ('C', 'cc', 9), 
+                             ('D', 'dd', 5), 
+                             ('E', 'ee', 2)
+                         ], columns = ['capital letter', 'lowercase letter', 'number'])
+
+      print(df2, '\n')
+
+      df3 = pd.DataFrame({
+                             'name': ['mason', 'jason', 'blason'], 
+                             'age' : [34, 35, 36],
+                             'cap' : ['A', 'D', 'F']
+                         }, index = ['A', 'D', 'F'])
+
+      df3.index = df3['cap']
+
+      # indices got taken from the right data frame (df2)
+      print(pd.merge(left = df1, right = df2, left_index = True, right_on = 'capital letter'))
+
+      # indices get taken from the the left data frame (df1)
+      print(pd.merge(left = df1, right = df2, left_on = 'num', right_index = True))
+
+      # indices get taken from both because they're the same!
+      print(pd.merge(left = df1, right = df3, left_index = True, right_index = True))
+
 # inner join
+- If we wanted to `merge` on a column, an inner merge means that the result will only have the rows which BOTH data frames have. 
+- It's like an AND case
+
+      import pandas as pd
+
+      colours = pd.DataFrame([
+          (1, 'Brown'),
+          (2, 'White'),
+          (3, 'Green'),
+          #(4, 'Orange'),  #uncomment this to get the 4th observation too
+      ], columns=['Product_ID', 'Colour'])
+
+      print(colours, '\n')
+
+      types = pd.DataFrame([
+          (1, 'Basketball'),
+          (2, 'Baseball'),
+          (3, 'Tennis Ball'),
+          (4, 'Squash Ball'), 
+      ], columns=['Product_ID', 'Type'])
+
+      print(types, '\n')
+
+      print(pd.merge(colours, types, on='Product_ID'))
+
 # outer join
+The outer join is like an OR. It can be specified into 3 categories:
+
+- Left outer join: keeps all the data from the left data frame, possibly introducing `NaN` or `None`. Does an inner join for the right data frame
+
+
+      import pandas as pd
+
+      colours = pd.DataFrame([
+          (1, 'Brown'),
+          (2, 'White'),
+          (3, 'Green'),
+          (4, 'Orange'),
+      ], columns=['Product_ID', 'Colour'])
+
+      print(colours, '\n')
+
+      types = pd.DataFrame([
+          (1, 'Basketball'),
+          (2, 'Baseball'),
+          (3, 'Tennis Ball'),
+          (7, 'Soccer') # Not included in final dataframe.  
+      ], columns=['Product_ID', 'Type'])
+
+      print(types, '\n')
+
+      # colours is the left and types is the right
+      print(pd.merge(left = colours, right = types, on='Product_ID', how='left'))
+
+- Right outer join: Keeps all the data from the right data frame, possibly introducing `NaN` or `None`. Does an innjer join for the left data frame 
+
+
+      import pandas as pd
+
+      colours = pd.DataFrame([
+          (1, 'Brown'),
+          (2, 'White'),
+          (3, 'Green'),
+          (7, 'Yellow') # Not included in final data frame. 
+      ], columns=['Product_ID', 'Colour'])
+
+      print(colours, '\n')
+
+      types = pd.DataFrame([
+          (1, 'Basketball'),
+          (2, 'Baseball'),
+          (3, 'Tennis Ball'),
+          (4, 'Squash Ball')
+      ], columns=['Product_ID', 'Type'])
+
+      print(types, '\n')
+
+      # colours is the left and types is the right
+      print(pd.merge(colours, types, on='Product_ID', how='right'))
+
+- Full outer join: Keeps all the data from **both** data frames, possibly introducing `NaN` or `None`
+
+      import pandas as pd
+
+      colours = pd.DataFrame([
+          (1, 'Brown'),
+          (2, 'White'),
+          (3, 'Green'),
+          (4, 'Orange'),
+      ], columns=['Product_ID', 'Colour'])
+
+      types = pd.DataFrame([
+          (1, 'Basketball'),
+          (2, 'Baseball'),
+          (3, 'Tennis Ball'),
+          (5, 'Hockey Puck')
+      ], columns=['Product_ID', 'Type'])
+
+      # colours is the left and types is the right
+      print(pd.merge(colours, types, on='Product_ID', how='outer'))
+
 # joining on multiple columns
+To join on multiple columns, for the `on = 'var1'` parameter, include a list instead. That is `on = ['var1', 'var2']`
+
+    import pandas as pd
+
+    df1 = pd.DataFrame([
+        ('Square', 'Red', 0),
+        ('Round', 'Green', 20),
+        ('Hexagonal', 'Blue', 1000),
+    ], columns=['Shape', 'Colour', 'Likes'])
+
+    print(df1, '\n')
+
+    df2 = pd.DataFrame([
+        ('Square', 'Red', 0),
+        ('Round', 'Green', 100),
+        ('Hexagonal', 'Blue', 1000),
+    ], columns=['Shape', 'Colour', 'Sales'])
+
+    print(df2, '\n')
+
+    # specify a list instead
+    print(pd.merge(df1, df2, on=['Shape', 'Colour']))
+
 # category type
+
+`Category` is a data type in pandas that isn't in NumPy. A column with dtype `category` can only take on one of a set of values. It's analogous to Excel's enum. We can save memory and prevent invalid values from being set by converting object columns into `category` columns.
+
+Let's convert the "Gender" column to a `Category` type, using the `astype` function and assigning it back to the column. When we run the `info()` function, we notice that the dtype of this column is now `category` rather than `object`.
+
+
+    import pandas as pd
+
+    income = pd.DataFrame({
+        'Gender': ['Female', 'Male', 'Male', 'Male', 'Male', 'Male', 'Male', 'Female', 'Male', 'Female', 'Male', 'Male', 'Female', 'Male', 'Male'],
+        'Income level': ['lower middle', 'low', 'middle', 'higher middle', 'higher middle', 'middle', 'middle', 'higher middle', 'I prefer not to answer', 'middle', 'high', 'lower middle', 'I prefer not to answer', 'higher middle', 'middle']
+    })
+
+    income['Gender'] = income['Gender'].astype('category')
+    print(income.info())
+
+
 # timeseries and resampling
+- To make a timeseries we can use the `pd.date_range(starting date, period = n, freq = <S|H|D|W|M|Y|>)` function. 
+- `starting date` is a string for time. E.g `2020-01-01`
+- `period` is how many dates you wanna make. 
+- `freq` is either `S`, `H`, `D`, `W`, `M` or `Y` denoting the time. 
+
+      import pandas as pd
+
+      index = pd.date_range('2020-01-01', periods=6, freq='H')
+      print(index, '\n')
+      print(pd.Series([0,1,2,3, 4, 5], index=index), '\n')
+
+- We can also do ranges of dates by putting in two dates and a specified for `freq`
+
+
+      import pandas as pd
+      import numpy as np
+
+      print(pd.date_range('2020-01-01', '2020-02-01', freq='D'))
+
+- 
+
 # timeseries indexing
