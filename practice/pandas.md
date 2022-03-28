@@ -1501,6 +1501,61 @@ Let's convert the "Gender" column to a `Category` type, using the `astype` funct
 
       print(pd.date_range('2020-01-01', '2020-02-01', freq='D'))
 
-- 
+- We can summarise data from summarising across different time periods. 
+- For example the following data was obtained daily. However we make a new time series 
+- The new time series is obtained by starting from every second day and then taking the mean between that day and the next day. 
+- We use the `.resample('<time period>')` function. 
+
+      import pandas as pd
+
+      index = pd.date_range('2020-01-01', periods=4, freq='D')
+      daily = pd.Series([0,1,2,3], index=index)
+      print(daily, '\n')
+      resampled_mean = daily.resample('2D').mean()
+      print(resampled_mean, '\n')
+      resampled_min = daily.resample('2D').min()
+      print(resampled_min, '\n')
+
+- To convert a `string` to `data/time` we use `.to_datetime()`
+- When a column with a date/time `dtype` is set into an index, it automatically becomes a `DatetimeIndex` 
+
+    import pandas as pd
+
+    s = pd.Series(['2020-01-01', '2020-01-02', '2020-01-03'])
+    print(s.dtype)
+
+    s = pd.to_datetime(s)
+    print(s.dtype)
+
+    df = pd.DataFrame([('Alice', 1), ('Bob', 2), ('Eve', 3)], index=s)
+    print(df)
 
 # timeseries indexing
+
+    import pandas as pd
+    import numpy as np
+    from datetime import datetime
+
+    index = pd.date_range('2020-03-01', periods=48, freq='H')
+    df = pd.DataFrame({
+        'Views': pd.Series([32, 19, 17, 14, 21, 15, 19, 16, 17, 7, 21, 17, 20, 17, 24, 18, 16, 12, 16, 14, 14, 10, 10, 17, 23, 10, 14, 24, 13, 16, 17, 24, 16, 15, 23, 19, 13, 16, 16, 25, 17, 21, 16, 7, 19, 12, 14, 11], index=index),
+        'Sales': pd.Series([733, 211, 530, 512, 612, 580, 201, 200, 515, 74, 371, 555, 683, 266, 757, 542, 398, 356, 276, 372, 442, 155, 309, 617, 979, 244, 334, 1188, 542, 626, 562, 913, 650, 727, 535, 587, 408, 551, 364, 753, 708, 434, 679, 142, 632, 508, 550, 485], index=index)
+    })
+
+    print(df,'\n')
+
+    # index the day 2020-03-01 by putting '2020-03-01' into []
+    print(df['2020-03-01'])
+
+    # index the entire month of 2020-03 using df['2020-03']
+    print(df['2020-03'])
+
+    # index the entire year using df['2020']
+    print(df['2020'])
+
+    # index ranges from 6am to 10am. values are INCLUSIVE
+    print(df['2020-03-01 06:00:00':'2020-03-01 10:00:00'])
+
+    # You can also directly use Python's datetime objects in the slice itself:
+    # remeber to include: 'from datetime import datetime'
+    print(df[datetime(2020, 3, 1, 7, 0, 0):datetime(2020, 3, 1, 8, 0, 0)]))

@@ -1,17 +1,28 @@
-def deleteProducts(ids, m):
-    pass
+import matplotlib.pyplot as plt
 
-if __name__ == '__main__':
-    ids = [1, 1, 1, 2, 2, 3]
-    set_ids = set(ids)
-    # step 1: make a dictionary with the numbers as the id and the frequency as the key
-    my_dic = {}
-    for i in set_ids:
-        my_dic[i] = 0
+# plt.plot([1,2,3,4,5])
+# 
+# # If `plot` is called again, two lines are drawn on the same plot
+# plt.plot([5,4,3,2,1])
+# 
+# plt.show()
 
-    print(my_dic)
-    for i in ids:
-        my_dic[i] = int(my_dic[i]) + 1
+# plt.plot([1, 2, 3], [2, 4, 6])
+# plt.show()
 
-    print(my_dic)
 
+f1 = plt.figure()
+a1 = f1.gca()
+a1.plot([1, 2, 3, 4])
+f1.savefig('f1.png')
+
+
+f2 = plt.figure()
+a2 = f2.gca()
+a2.plot([1, 1, 1, 1])
+f2.savefig('f2.png')
+
+f3 = plt.gcf()
+a3 = f3.gca()
+a3.plot([1, 2, 3], [4, 5, 6])
+f3.show()
