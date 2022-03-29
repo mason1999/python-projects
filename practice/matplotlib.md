@@ -487,8 +487,76 @@ To set axis limits:
 
       # plt.show()
 # Axis ticks <a name = "10"></a>
+- To change the fontsize of the x axis label and y axis label use the `fontsize = a` parameter in the `.set_xlabel(...)` or `.set_ylabel(...)`
+- To change the label size of the ticks, use the `labelsize = a` parameter in the `.tick_params(...)` function. 
+- To rotate the label use the `rotation = a` parameter in the `.tick_params(...)` function. 
+
+
+      import matplotlib.pyplot as plt
+      from matplotlib import pyplot as plt
+      import numpy as np
+      import pandas as pd
+
+      ###################################### this code is to just prepare the data frame #################################
+      df = pd.read_csv("../data/temp.csv")
+      date = df['date'].copy()
+      i = 0
+      for str_date in date:
+          str_array = str_date.split(sep = '/')
+          mmddyy = str_array[1] + '/' + str_array[0] + '/' + str_array[2]
+          date[i] = mmddyy
+          i += 1
+
+      date = pd.to_datetime(date)
+      df = pd.concat([df, date], axis = 1)
+      df.columns = ['old date', 'temp', 'date']
+      del df['old date']
+      ###########################################################################################
+      print(df.head())
+
+      fig, ax = plt.subplots()
+
+      ax.plot(df['date'], df['temp'])
+      ax.set_title('temperatures across days')
+      ax.set_xlabel('days', fontsize = 12)
+      ax.set_ylabel('temperature', fontsize = 12)
+
+      # sets tick size and tick rotation for x axis. The tick labels get cut off so we use...
+      ax.tick_params(axis = 'x', labelsize = 8, rotation = 40)
+
+      # ... the tick_layout() parameter
+      fig.tight_layout()
+      fig.savefig('out.png')
+
 # Axis scales <a name = "11"></a>
+- We can change the scales of the $X$ and $Y$ axes using the `set_xscale('string')` and `set_yscale('string')`
+- Matplotlib accepts `linear`, `log`, `symlog` and `logit` scales. 
+
+
+      import matplotlib.pyplot as plt
+      import numpy as np
+
+      x = np.linspace(0, 200, 200)
+      fig, ax = plt.subplots()
+      ax.plot(x, x, label='$y = x$')
+      ax.plot(x, x ** 2, label='$y = x^2$')
+      ax.plot(x, np.exp(x), label='$y = e^x$')
+
+      ax.set_yscale('log')
+
+      ax.set_title('Log chart')
+      ax.set_xlabel('x')
+      ax.set_ylabel('y')
+      ax.set_xlim(left=1)
+      ax.set_ylim(bottom=1)
+
+      ax.legend()
+      fig.savefig('out.png')
+
 # Bar charts <a name = "12"></a>
+We can create a bar chart using the `bar()` function, it takes in two main parameters:
+- `x`: A sequence of scalars listing the categories (or if it's not categorical data, it's really just the x values of the chart)
+- `height`: A scalar or sequence of scalars listing the heights of the categories. 
 # Pie charts <a name = "13"></a>
 # Scatter plots <a name = "14"></a>
 # Histograms <a name = "15"></a>
