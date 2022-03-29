@@ -354,6 +354,19 @@ Example:
             counter += 2
             print("") # print out the newline
 
+**Easier way to do it**
+
+    import sys 
+
+    n = int(sys.argv[1])
+
+    i = 1
+    while n >= 1: 
+        print(" " * (n - 1), end = "")
+        stars = "*" * i
+        print(stars)
+        n -= 1
+        i += 2
 # lists <a name = ""></a>
 Python's version of an array, but you can have more than one variable type. To `print()` the list or elements of the list, we can use the normal `print()` function
 
