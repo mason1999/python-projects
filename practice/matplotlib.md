@@ -554,13 +554,259 @@ To set axis limits:
       fig.savefig('out.png')
 
 # Bar charts <a name = "12"></a>
-We can create a bar chart using the `bar()` function, it takes in two main parameters:
-- `x`: A sequence of scalars listing the categories (or if it's not categorical data, it's really just the x values of the chart)
-- `height`: A scalar or sequence of scalars listing the heights of the categories. 
+
+
+**NORMAL BAR CHARTS**
+
+To create a bar chart use the `plt.bar(x, y)` function
+- `x` is a list of names
+- `height` is a numerical list indicating the frequencies of the categories of `x`
+
+      import matplotlib.pyplot as plt
+
+      data = {
+          'China': 1402625480,
+          'India': 1362187627,
+          'US': 329680233,
+          'Indonesia': 268074600,
+          'Pakistan': 220312891,
+      }
+      # data.items() : returns a list of tuples [(key1, val1), (key2, val2), ...]
+      # *data.items(): returns a vararg structure: (k1, v1), (k2, v2), ...
+      # zip(*data.items()): returns (k1, k2, k3, ...), (v1, v2, v3,...)
+      labels, values = zip(*data.items())
+      fig, ax = plt.subplots()
+      ax.bar(labels, values)
+      fig.savefig('out.png')
+
+**HORIZONTAL BAR CHARTS**
+
+To create a horizontal bar char use the `plt.barh(x, y)` function
+
+
+    import matplotlib.pyplot as plt
+
+    fig, ax = plt.subplots()
+    ax.barh(['China', 'India', 'US'], [140262, 136218, 32968])
+    fig.savefig('out.png')
+
+**CLUSTERED BAR CHARTS**
+
+For clustered bar charts we:
+
+1. Basically plot two bar charts together
+2. we set the width to be (for e.g `0.3`). This'll be the width of each bar chart
+3. So that we manually specify the `x_pos` of the first and `x_pos + width` for the second
+4. we manually specify the ticks `x_pos + width/2` and put the `country labels on`
+
+        import matplotlib.pyplot as plt
+        import pandas as pd
+
+        countries = ['China', 'India', 'US', 'Indonesia', 'Pakistan']
+        population = [1402625480, 1362187627, 329680233, 268074600, 220312891]
+        population_prev = [1338000000, 1234000000, 309000000, 241000000, 179000000]
+
+        # calculate positions of the bars
+        width = 0.3
+        x_pos = list(range(len(countries)))
+        x_pos_prev = [i + width for i in x_pos]
+
+        # figure and axes
+        fig, ax = plt.subplots()
+
+        # plot both bars in respective positions
+        ax.bar(x_pos_prev, population_prev, width, label='Some years ago')
+        ax.bar(x_pos, population, width, label='Current')
+
+        # calculate positions of the ticks, set ticks to country names
+        ticks_pos = [i + width / 2 for i in x_pos]
+        ax.set_xticks(ticks_pos, countries)
+
+        # show legend
+        ax.legend()
+
+        fig.savefig('out.png')
+
+**STACKED BAR CHARTS**
+
+To do a stacked bar chart: 
+
+1. `fig, ax = plt.subplots()`
+2. let `width = 0.3` and calculate the `x_pos` of the bar charts
+3. plot at the `x_pos` your categories. For subsequent plotting...
+4. ... You need to use the `bottom = [numerical list or array]` parameter
+5. This parameter is "where the bottom of the current bar chart is". So it's the overall running height.
+6. Calculate the position of ticks and set them with `ax.set_xticks(position of ticks, categorical array)`
+7. show legend with `ax.legend()`
+
+        import matplotlib.pyplot as plt
+        import pandas as pd
+        import numpy as np
+
+        hair = ['Brown hair', 'Black hair', 'Blond hair']
+        men = np.array([5,3,1])
+        women = np.array([2,4,3])
+        children = np.array([4, 5, 2])
+
+        # figure and axis
+        fig, ax = plt.subplots()
+
+        # calculate the positions of the bars
+        width = 0.3
+        x_pos = list(range(len(hair)))
+
+        # plot both bars in their respective positions
+        ax.bar(x_pos, men, label = 'men')
+        ax.bar(x_pos, women, label = 'women', bottom = men)
+
+        # calculate third group: children
+        bottom_of_3 = men + women
+        ax.bar(x_pos, children, label = 'children', bottom = bottom_of_3)
+
+        # calulates the positions of the ticks and set the 
+        ax.set_xticks(x_pos, hair)
+
+        # show legend
+        ax.legend()
+
+        fig.savefig('out.png')
 # Pie charts <a name = "13"></a>
+Use  `.pie(numerical array, categorical array)` to create a bar chart
+
+
+    import matplotlib.pyplot as plt
+
+    labels = ['Part A', 'Part B', 'Part C']
+    sizes = [50, 30, 10]
+
+    fig, ax = plt.subplots()
+
+    ax.pie(sizes, labels=labels)
+    fig.savefig('out.png')
+
+To customise it you can use various parameters: 
+
+
+    import matplotlib.pyplot as plt
+
+    labels = ['Part A', 'Part B', 'Part C']
+    sizes = [50, 30, 10]
+    explode = (0, 0, 0.2)
+    colors = ['lightblue', 'grey', 'pink']
+
+    fig, ax = plt.subplots()
+
+    ax.pie(sizes, colors=colors, explode=explode, shadow=True, autopct='%1.2f%%', labels=labels)
+    fig.savefig('out.png')
 # Scatter plots <a name = "14"></a>
+Use the `ax.scatter(x, y)` to plot a scatter plot:
+
+    import matplotlib.pyplot as plt
+
+    fig, ax = plt.subplots()
+    ax.scatter([1,2,3,4,5], [5,4,3,2,1])
+    fig.savefig('out.png')
+
+Change colour of the scatter plot: 
+
+    import matplotlib.pyplot as plt
+
+    fig, ax = plt.subplots()
+    # single color
+    ax.scatter([1, 2, 3, 4, 5], [5, 4, 3, 2, 1], c = 'red')
+    # single hex string
+    ax.scatter([0, 0, 0, 0, 0], [5, 4, 3, 2, 1], c = '#0000ff')
+    # list of colors
+    ax.scatter([5, 5, 5, 5, 5], [5, 4, 3, 2, 1], c = ['red', 'green', 'blue', 'yellow', 'orange'])
+    fig.savefig('out.png')
+
+Color based on scale:
+
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    rng = np.random.RandomState(12345)
+    # 50 random numbers between 0 and 1 
+    x = rng.randn(50)
+    # 50 random numbers between 0 and 1 
+    y = rng.randn(50)
+    # 50 random numbers between 0 and 1 
+    colour = rng.rand(50)
+    # 50 random numbers between 0 and 1000 
+    size = 1000 * rng.rand(50)
+
+    fig, ax = plt.subplots()
+
+    # for the scatter plot
+    ax.scatter(x, y, c=colour, s=size)
+
+    fig.savefig('out.png')
 # Histograms <a name = "15"></a>
+To make a historgram use the `ax.hist(data, bins = 50)` where `data` is the numerical data you have the `bins = 50` provides 50 bins.
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # Returns samples from the standard normal distribution.
+    data = np.random.randn(500) 
+
+    fig, ax = plt.subplots()
+
+    ax.hist(data, bins=50);
+
+    fig.savefig('out.png')
+
+Controlling the opacity and number of bins. To draw from a standard normal distn, use the `np.pandom.norma(a, b, n)` to sample `n` values from normal distn with mean `-2` and `1` for example. 
+
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # Returns samples from normal distns with mean 0 and std dev 1 
+    # and samples from normal distn with mean -2 and std dev 1
+    data1 = np.random.normal(0, 1, 500) 
+    data2 = np.random.normal(-2, 1, 500)
+
+    fig, ax = plt.subplots()
+
+    # alpha controls the transparancy 
+    ax.hist(data1, bins=50, alpha = 0.4);
+    ax.hist(data2, bins=50, alpha = 0.5);
+
+    fig.savefig('out.png')
 # Subplots <a name = "16"></a>
+The `plt.subplots()` function allows us to change the number of axes in the default figure.
+The main parameters are:
+
+- `nrows`, `ncols`: These two parameters divide our figure up into an nrows x ncols grid of axes.
+- `figsize`:  a tuple with two integers describing the width and height of the figure in inches.
+
+Subplots return two objects: 
+- the figure
+- an `ndarray` (of shape `nrows` $\times$ `ncols`) containing the axes. 
+
+Example 1: 
+
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(12, 6))
+    axes[0].set_title('Axes 1')
+    axes[1].set_title('Axes 2')
+    fig.savefig('out.png')
+
+Example 2: example showing how to make lots of names for the plots with for loops
+
+
+
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    fig, axes = plt.subplots(nrows=2, ncols=3, figsize=(9, 6))
+    for i, row in enumerate(axes):
+        for j, a in enumerate(row):
+            a.set_title(f'Row {i}, Column {j}')
+    fig.savefig('out.png')
 # 3D plots <a name = "17"></a>
 # Contour plots <a name = "18"></a>
 # Plotting with Pandas <a name = "19"></a>
