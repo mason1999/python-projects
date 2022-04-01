@@ -1,24 +1,8 @@
-from scipy import optimize
+from scipy import interpolate
 import numpy as np
-import matplotlib.pyplot as plt
+from matplotlib import pyplot as plt
 
-# We have random data points which is in the shape of a sine function
-np.random.seed(10)
-x = np.linspace(0, 10, num=75)
-y = 3.4 * np.sin(1.6 * x) + np.random.normal(size=75)
-
-# define a function in the form of y = asin(bx)
-def test_sin(x, a, b):
-    return a * np.sin(b * x)
-
-# covariance a 2x2 array for the parameters. 
-params, covariance = optimize.curve_fit(test_sin, x, y, p0 = [3, 1])
-
-fitted_y = test_sin(x, params[0], params[1])
-
-
-fig, ax = plt.subplots()
-
-ax.scatter(x, y)
-ax.plot(x, fitted_y)
-fig.savefig('out.png')
+x = [-3., -1.8, -0.6, 0.6, 1.8, 3.0 ]
+y = [-80.99326205, -17.47362923, -0.57372642, 0.89459696, 18.31473075, 83.71828183]
+f = interpolate.interp1d(x, y, kind = "cubic")
+print(f(1.9))
