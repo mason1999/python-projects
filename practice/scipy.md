@@ -247,7 +247,207 @@ The scipy.stats subpackage contains three classes of distributions:
 
 Each of these classes of distributions have the same methods.
 # continuous distributions <a name = "10"></a>
+
+These distributions have a `rvs` method to generate '`size`' number of random variates. The `rvs` method takes in a `loc` (location) and a `scale` argument. By default the `loc` parameter is 0, and the `scale` parameter is 1.
+
+Note: Because we're generating random variates at each run of the program, the graph will not look exactly the same each time.
+
+**UNIFORM DISTRIBUTION**
+
+`uniform` provides a constant distribution between `loc` and `loc + scale`
+
+
+    import numpy as np
+    from scipy.stats import uniform
+    import matplotlib.pyplot as plt
+
+    # generating the 10000 for X ~ unif(2, 3) = unif(loc, loc + scale)
+    uniform_data = uniform.rvs(size=100, loc=2, scale=1)
+
+    # histogram plot
+    fig, ax = plt.subplots()
+    ax.hist(uniform_data, bins=100)
+    ax.set_xlim(1, 4)
+    ax.set_ylim(0, 5)
+    ax.set_xlabel('Distribution')
+    ax.set_ylabel('Frequency')
+    ax.set_title('Uniform distribution')
+    fig.savefig('out.png')
+
+**NORMAL DISTRIBUTION**
+
+
+    import numpy as np
+    from scipy.stats import norm
+    import matplotlib.pyplot as plt
+
+    # generating 1000 form X ~ N(menan = 3, stdev = 0.5)
+    normal_data = norm.rvs(size=1000, loc=3, scale=0.5)
+
+    # histogram plot
+    plt.hist(normal_data, bins=100)
+    plt.xlim(1, 5)
+    plt.ylim(0, 50)
+    plt.xlabel('Distribution')
+    plt.ylabel('Frequency')
+    plt.title('Normal distribution')
+    plt.savefig('out.png')
 # discrete distributions <a name = "11"></a>
+
+**BINOMIAL DISTRIBUTION**
+
+Binomial distributions describe the probability of $n$ successes for some number of repeated trials, where each trial only has two possible outcomes - success or failure.
+
+
+The number of trials is passed in as the parameter `n`, and the probability of success for a given trial is given by parameter `p`. Size indicates the number of times to repeat the `n` trials.
+
+
+    from scipy.stats import binom
+    import matplotlib.pyplot as plt
+
+    # generating the binomial data
+    binomial_data = binom.rvs(size=1000, n=10, p=0.5)
+
+    # histogram plot
+    plt.hist(binomial_data, bins=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
+    plt.xlim(0, 18)
+    plt.ylim(0, 300)
+    plt.xlabel('Number of successes')
+    plt.ylabel('Frequency')
+    plt.title('Binomial distribution')
+    plt.savefig('out.png')
+
+**BERNOULLI DISTRIBUTION**
+This is a special case of the binomial distribution where only one trial is conducted. So this time, there's no need to specify the `n` paramter. 
+
+
+    from scipy.stats import bernoulli
+    import matplotlib.pyplot as plt
+
+    # generating the binomial data
+    bernoulli_data = bernoulli.rvs(size=1000, p=0.8)
+
+    # histogram plot
+    plt.hist(bernoulli_data)
+    plt.ylim(0, 1000)
+    plt.xlabel('Number of successes')
+    plt.ylabel('Frequency')
+    plt.title('Bernoulli distribution')
+    plt.savefig('out.png')
+
 # probability mass/density function <a name = "12"></a>
+Previously, we've been plotting the frequency of values, but what about the probability of a random variable taking on a particular value?
+
+The **PMF (Probability Mass Function)** describes exactly that for discrete distributions. It's the probability 
+
+For continuous distributions, we have the **PDF (Probability Density Function)**. Strictly speaking, the probability of a continuous random variable taking on a specific value is zero, since there are an infinite set of possible values. So when talking about continuous random variables we use the PDF, which describes the probability of the variable falling within some range of values.
+
+SciPy has the `pmf` method for discrete distributions and the `pdf` method for continuous distributions.
+
+**PMF EXAMPLE** 
+
+    import numpy as np
+    from scipy.stats import binom
+    import matplotlib.pyplot as plt
+
+    x = np.arange(0, 11)
+    pmf_data = binom.pmf(x, n=10, p=0.2)
+    print(pmf_data)
+
+    plt.bar(x, pmf_data)
+    plt.title('Binomial PMF')
+    plt.ylabel('Probability')
+    plt.savefig('out.png')
+
+**PDF EXAMPLE**
+
+    import numpy as np
+    from scipy.stats import expon
+    import matplotlib.pyplot as plt
+
+    x = np.arange(0, 6, 0.1)
+    pdf_data = expon.pdf(x)
+    print(pdf_data)
+
+    plt.plot(x, pdf_data)
+    plt.title('Exponential PDF')
+    plt.ylabel('Probability')
+    plt.ylim(0, 1.1)
+    plt.savefig('out.png')
+
 # cumulative distribution function <a name = "13"></a>
+
+The **Cumulative Distribution Function (CDF)** is a function between $x$ and the probability of the random variable having a value less than or equal to $x$
+
+To calculate the CDF at different points along the distribution, we pass in a sequence (the $x$ values) to the `cdf` distribution method. What's returned are the CDF values at each of those points.
+
+Here is an example of the `cdf` method being used for the normal distribution.
+
+
+    import numpy as np
+    from scipy.stats import norm
+    import matplotlib.pyplot as plt
+
+    samples = np.arange(-5.0, 5.0, 0.01)
+    cdf_data = norm.cdf(samples)
+    print(cdf_data)
+
+    plt.plot(samples, cdf_data)
+    plt.title('Standard Normal CDF')
+    plt.ylabel('F(x) = P(X <= x)')
+    plt.savefig('out.png')
+
+By default, the `norm.cdf` will calculate the CDF for a normal distribution with a mean of 0 and standard deviation of 1. This can be changed using the `loc` and `scale` parameters, as we did with the `rvs` method.
+
+
+    import numpy as np
+    from scipy.stats import norm
+    import matplotlib.pyplot as plt
+
+    samples = np.arange(-5.0, 5.0, 0.01)
+    cdf_data = norm.cdf(samples, loc=1, scale=0.5)
+    print(cdf_data)
+
+    plt.plot(samples, cdf_data)
+    plt.title('Normal CDF mean=1, stddev=0.5')
+    plt.ylabel('F(x) = P(X <= x)')
+    plt.savefig('out.png')
+
+
 # percentage point function <a name = "14"></a>
+
+The **PPF (Percent-point Function)** is also known as the inverse cumulative distribution function. The function maps probability $p$ to a random variable value $x$. The probability of $p$ is the probability that a random variable takes on a value less than or equal to $x$.
+
+Here is an example of the `ppf` method being used for the normal distribution.
+
+
+    import numpy as np
+    from scipy.stats import norm
+    import matplotlib.pyplot as plt
+
+    samples = np.arange(0, 1, 0.01)
+    ppf_data = norm.ppf(samples)
+    print(ppf_data)
+
+    plt.plot(samples, ppf_data)
+    plt.title('Normal PPF')
+    plt.xlabel('Probability')
+    plt.ylabel('X')
+    plt.savefig('out.png')
+
+And here is an example of the `ppf` method used for the exponential distribution.
+
+
+    import numpy as np
+    from scipy.stats import expon
+    import matplotlib.pyplot as plt
+
+    samples = np.arange(0, 1, 0.01)
+    ppf_data = expon.ppf(samples)
+    print(ppf_data)
+
+    plt.plot(samples, ppf_data)
+    plt.title('Exponential PPF')
+    plt.xlabel('Probability')
+    plt.ylabel('X')
+    plt.savefig('out.png')
